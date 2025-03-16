@@ -1,9 +1,7 @@
+import Routes from "@/router";
+
 function App() {
-  return (
-    <div className="flex items-center justify-center w-full h-[100vh]">
-      <span className="text-[2rem]">App</span>
-    </div>
-  );
+  return <Routes />;
 }
 
 export default App;
