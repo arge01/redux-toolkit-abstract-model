@@ -1,0 +1,245 @@
+.header-open {
+  .ant-dropdown-arrow {
+    right: 25px;
+  }
+
+  .ant-dropdown-menu {
+    right: 15px;
+    padding: 15px;
+  }
+
+  ul.ant-dropdown-menu-item-group-list {
+    display: flex;
+    flex-wrap: wrap;
+
+    li {
+      width: 100%;
+
+      &.ant-dropdown-menu-item {
+        width: 100%;
+
+        .span {
+          font-size: 10pt;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          font-weight: 600;
+          color: #ff0000;
+        }
+
+        .anticon {
+          padding: 7.5px;
+        }
+      }
+    }
+  }
+}
+
+.header {
+  background: #fff;
+  height: 55px;
+  box-shadow: 0px 1px 3px 1px rgba(0, 0, 0, .1);
+  position: fixed;
+  top: 0;
+
+  .menu-item-list {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    width: 100%;
+    padding: 0 7.5px;
+
+    a {
+      text-decoration: none;
+      font-size: 11pt;
+      padding: 7.5px;
+      display: flex;
+      color: #6f6f6f;
+      align-items: center;
+      justify-content: center;
+
+      svg {
+        width: 17px;
+        height: 17px;
+      }
+
+      &:hover {
+        color: #000;
+      }
+
+      &::after {
+        display: flex;
+        content: "/";
+        padding-left: 15px;
+        color: #e8e8e8;
+        height: 55px;
+        align-items: center;
+        justify-content: center;
+        font-size: 2rem;
+        font-weight: 100;
+      }
+
+      &:last-child {
+        &::after {
+          display: none;
+        }
+      }
+    }
+  }
+
+  nav {
+    position: absolute;
+    width: 450px;
+    height: 250px;
+    padding: 15px;
+    right: 0;
+    top: 55px;
+    backdrop-filter: blur(5px);
+    background: rgba(0, 0, 0, 0.7);
+    list-style-type: none;
+    -webkit-font-smoothing: antialiased;
+    display: flex;
+    align-items: flex-start;
+
+    ul {
+      list-style-type: none;
+      display: flex;
+
+      li {
+        width: 100%;
+        color: #fff;
+        padding: 5px 0;
+        cursor: auto;
+
+        &.title {
+          &>span {
+            font-size: 12pt;
+          }
+        }
+
+        &:not(.title) {
+          cursor: pointer;
+
+          * {
+            font-size: 10pt;
+          }
+        }
+
+        .icon {
+          width: 25px;
+          height: 25px;
+          background: #a98b22;
+          border-radius: 100%;
+
+          svg {
+            width: 15px;
+            height: 15px;
+          }
+        }
+
+        .text {
+          padding: 0 7.5px;
+        }
+
+        *,
+        a {
+          color: #fff;
+          font-size: 11pt;
+        }
+      }
+    }
+  }
+
+  &-right {
+    display: flex;
+    align-items: center;
+
+    .menu-icon {
+      width: 25px;
+      height: 25px;
+      cursor: pointer;
+    }
+
+    .ant-avatar {
+      svg {
+        width: 15px;
+        height: 15px;
+      }
+    }
+
+    .header-lang {
+      padding-left: 15px;
+      position: relative;
+
+      &-toggle {
+        position: absolute;
+        background: #fff;
+        top: 25px;
+        right: -10px;
+        display: flex;
+        flex-wrap: wrap;
+
+        li {
+          width: 100%;
+          flex: 1 1 100%;
+          border-bottom: 1px solid #ddd;
+          padding: 7.5px 15px;
+          background: #e40615;
+          color: #fff;
+          cursor: pointer;
+
+          &.active,
+          &:hover {
+            background: #222222;
+          }
+        }
+      }
+
+      span {
+        svg {
+          width: 20px;
+          height: 20px;
+          cursor: pointer;
+        }
+      }
+    }
+
+    .menu-icon {
+      width: 25px;
+      height: 25px;
+
+      svg {
+        width: 17px;
+        height: 17px;
+        cursor: pointer;
+      }
+    }
+
+    &-header {
+      display: flex;
+      align-items: center;
+      padding: 0 15px;
+
+      span {
+        width: 35px;
+        height: 35px;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+    }
+  }
+
+  .logo-main {
+    height: 55px;
+    padding: 0 15px;
+    border-right: 1px solid #f2f2f2;
+
+    .logo {
+      img {
+        max-height: 35px;
+      }
+    }
+  }
+}
