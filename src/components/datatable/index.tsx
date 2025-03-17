@@ -1,15 +1,14 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import { RiRefreshLine } from "react-icons/ri";
 import TBody from "./TBody";
 import Column from "./THead";
 
-export type ActionProps = {
+export type ActionProps<T> = {
   key: string;
   actionName?: string;
   actions: {
     title?: string;
     icon?: React.ReactNode;
-    action: (v: any) => any;
+    action: (v: T) => void;
   }[];
 };
 
@@ -19,19 +18,19 @@ export type ColumnProps = {
 };
 
 export type HeaderProps = {
-  newAction: () => any;
-  searchAction: () => any;
+  newAction: () => void;
+  searchAction: () => void;
 };
 
 export type DataTableProps<T> = {
   columns: ColumnProps[];
-  action: ActionProps;
+  action: ActionProps<T>;
   data: T[];
   header?: HeaderProps;
   pagination?: boolean;
 };
 
-function DataTable<T = unknown>({
+function DataTable<T>({
   action,
   columns,
   data,
@@ -150,7 +149,7 @@ function DataTable<T = unknown>({
 
         <div className="min-w-full inline-block align-middle">
           <div className="overflow-hidden">
-            <table className="min-w-full">
+            <table className="table min-w-full">
               <thead className="border-b border-gray-200">
                 <tr>
                   <Column title="#" />
@@ -169,12 +168,15 @@ function DataTable<T = unknown>({
               </thead>
 
               <tbody className="divide-y divide-gray-200">
-                {data.map((v: any, k) => (
+                {data.map((v, k) => (
                   <tr key={k}>
                     <td>{++k}</td>
 
                     {columns.map((c, ck) => (
-                      <TBody key={ck * k} children={v[c.key]} />
+                      <TBody
+                        key={ck * k}
+                        children={(v as Record<string, string>)[c.key]}
+                      />
                     ))}
 
                     <td className="p-0 whitespace-nowrap text-end text-sm font-medium">

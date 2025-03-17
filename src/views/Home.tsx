@@ -70,7 +70,7 @@ function Home() {
     searchAction: () => "search",
   };
 
-  const action: ActionProps = {
+  const action: ActionProps<{ date: string; key: string }> = {
     key: "action",
     actions: [
       {

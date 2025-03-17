@@ -1,2 +1,28 @@
 @use "@/styles/components/header";
 @use "@/styles/components/footer";
+
+.table {
+  thead {
+    tr {
+      th {
+        padding: 0 15px;
+      }
+    }
+  }
+  tbody {
+    tr {
+      &:nth-child(odd) {
+        background: #fbfbfb;
+      }
+      &:nth-child(even) {
+        background: #fff;
+      }
+
+      td {
+        padding: 15px;
+        border: none;
+        border-bottom: 1px solid #f2f2f2;
+      }
+    }
+  }
+}
