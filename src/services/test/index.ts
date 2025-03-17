@@ -1,10 +1,4 @@
-import { createSlice } from "@reduxjs/toolkit";
-import { RootState } from "@/redux/store";
-import { Method, Model } from "..";
-
-export const name = "test";
-export const method: Method = "GET";
-export const url: string = "https://jsonplaceholder.typicode.com/posts";
+import { ImpService } from "../base/ImpService";
 
 export interface IModel {
   userId: number;
@@ -13,39 +7,22 @@ export interface IModel {
   body: string;
 }
 
-const initialState: Model<IModel[]> = {
-  data: [] as IModel[],
-  status: "invited",
-  error: undefined,
-};
+export class Service extends ImpService<IModel[]> {
+  constructor() {
+    super("test", "GET", "https://jsonplaceholder.typicode.com/posts", {
+      data: [] as IModel[],
+      status: "invited",
+      error: undefined,
+    });
+  }
+}
 
-const slice = createSlice({
-  name,
-  initialState,
-  reducers: {
-    pending: (state) => {
-      state.status = "loading";
-      state.data = initialState.data;
-    },
-    success: (state, action) => {
-      state.status = "success";
-      state.data = action.payload;
-    },
-    failure: (state, action) => {
-      state.status = "failed";
-      state.error = action.payload;
-    },
-  },
-});
+export const service: ImpService<IModel[]> = new Service();
+export const slice = service.getSlice();
 
 export const actions = slice.actions;
 export const { pending, success, failure } = actions;
 
-export const services = {
-  name: name as keyof RootState,
-  url,
-  method,
-  actions,
-};
+export const services = service.getService();
 
 export default slice.reducer;

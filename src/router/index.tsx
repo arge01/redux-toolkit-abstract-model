@@ -1,7 +1,10 @@
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import Layout from "@/components/layout";
+import Test from "@/tests/ReduxTest";
 import About from "@/views/About";
 import Home from "@/views/Home";
+import NotFound from "@/views/NotFound";
+import Groups from "@/views/simulation/Gruops";
 
 const router = createBrowserRouter([
   {
@@ -16,7 +19,24 @@ const router = createBrowserRouter([
         path: "about",
         element: <About />,
       },
+      {
+        path: "test",
+        element: <Test />,
+      },
+      {
+        path: "play",
+        children: [
+          {
+            path: "gruops/:key",
+            element: <Groups />,
+          },
+        ],
+      },
     ],
+  },
+  {
+    path: "*",
+    element: <NotFound />,
   },
 ]);
 

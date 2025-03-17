@@ -1,4 +1,3 @@
-/* eslint-disable react-refresh/only-export-components */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import type { SetStateAction } from "react";
 import { createContext, useContext } from "react";

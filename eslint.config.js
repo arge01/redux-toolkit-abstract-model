@@ -49,6 +49,7 @@ export default tseslint.config(
       "space-infix-ops": "error",
       "eol-last": ["error", "always"],
       "react-hooks/exhaustive-deps": "off",
+      "react-refresh/only-export-components": "off",
     },
   }
 );

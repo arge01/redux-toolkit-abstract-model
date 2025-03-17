@@ -14,7 +14,7 @@ const initialState: Model = {
 };
 
 const slice = createSlice({
-  name: "" as keyof RootState,
+  name: "" as keyof RootState | any,
   initialState,
   reducers: {
     pending: (state) => {
