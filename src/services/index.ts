@@ -1,6 +1,4 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { AnyAction } from "@reduxjs/toolkit";
-
 export type Type = {
   loading: string;
   success: string;
@@ -9,22 +7,70 @@ export type Type = {
 
 export type Status = "success" | "loading" | "failed" | "invited";
 
-export interface Model<T = undefined> {
-  data: T;
-  status: Status;
-  error?: undefined | string | object;
+export interface E {
+  message: string;
+  name: string;
+  stack: string;
+  config: Config;
+  code: string;
+  status: number;
+}
+
+export interface Config {
+  transitional: Transitional;
+  adapter: string[];
+  transformRequest: any[];
+  transformResponse: any[];
+  timeout: number;
+  xsrfCookieName: string;
+  xsrfHeaderName: string;
+  maxContentLength: number;
+  maxBodyLength: number;
+  env: any;
+  headers: Headers;
+  method: string;
+  url: string;
+  allowAbsoluteUrls: boolean;
+}
+
+export interface Transitional {
+  silentJSONParsing: boolean;
+  forcedJSONParsing: boolean;
+  clarifyTimeoutError: boolean;
+}
+
+export interface Headers {
+  Accept: string;
+  "Content-Type": string;
+}
+
+export interface Model<T> {
+  entity?: T;
+  entities?: T[];
+  loading: boolean;
+  success: boolean;
+  error?: E | string | undefined;
+  deleted?: boolean;
 }
 
 export type Method = "GET" | "POST" | "PUT" | "DELETE" | "PATCH";
 
-export interface ReducerAction<T = any> extends AnyAction {
+export interface ReducerAction {
   type: string;
-  payload: {
-    url: string;
+  url: string;
+  method: Method;
+  payload?: unknown;
+  [key: string]: unknown;
+}
+
+export interface PayloadAction<T = unknown> {
+  type: string;
+  url: string;
+  method: Method;
+  payload?: T;
+  [key: string]: unknown;
+  meta?: {
     method: Method;
-    data?: T;
-    onPending: string;
-    onSuccess: string;
-    onError: string;
+    url: string;
   };
 }

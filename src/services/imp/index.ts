@@ -1,4 +1,4 @@
-import { ImpService } from "../imp/ImpService";
+import { ImpService } from "./ImpService";
 
 export interface MODEL {
   id: number;
@@ -7,7 +7,6 @@ export interface MODEL {
 }
 
 export interface REQUEST {
-  id?: number;
   title: string;
   desc: string;
 }
@@ -18,7 +17,7 @@ export interface DELETE {
 
 export class Service extends ImpService<MODEL> {
   constructor() {
-    super("test", "/test");
+    super("", "");
   }
 }
 
