@@ -2,22 +2,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { ActionReducerMapBuilder, createSlice } from "@reduxjs/toolkit";
 import { RootState } from "@/redux/store";
-import { Method, Model, PayloadAction } from "..";
-
-export interface ApiRequestStartAction {
-  type: "api/request_START";
-  payload: { url: string; method: Method };
-}
-
-export interface ApiRequestSuccessAction<T> {
-  type: "api/request_SUCCESS";
-  payload: T;
-}
-
-export interface ApiRequestErrorAction {
-  type: "api/request_ERROR";
-  payload: Error;
-}
+import { Model, PayloadAction } from "..";
 
 export abstract class ImpService<T> {
   protected name: string;
@@ -95,13 +80,16 @@ export abstract class ImpService<T> {
       initialState: this.initialState,
       reducers: this.getReducers(),
       extraReducers: (builder: ActionReducerMapBuilder<Model<T>> | any) => {
-        builder.addCase("api/request_START", (state: Model<T>) => {
-          state.loading = true;
-          state.error = undefined;
-        });
+        builder.addCase(
+          `api/request[${this.name}]-pending`,
+          (state: Model<T>) => {
+            state.loading = true;
+            state.error = undefined;
+          }
+        );
         builder
           .addCase(
-            "api/request_SUCCESS",
+            `api/request[${this.name}]-succsess`,
             (state: Model<T>, action: PayloadAction<T | T[]>) => {
               state.loading = false;
               state.success = true;
@@ -136,7 +124,7 @@ export abstract class ImpService<T> {
             }
           )
           .addCase(
-            "api/request_ERROR",
+            `api/request[${this.name}]-error`,
             (state: Model<T>, action: PayloadAction<Error>) => {
               state.loading = false;
               state.error = action.payload as Model<T>["error"];

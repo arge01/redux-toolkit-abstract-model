@@ -6,10 +6,12 @@ export const apiMiddleware: Middleware =
   (store) => (next) => async (action) => {
     const apiAction = action as PayloadAction;
 
-    if (apiAction.type === "api/request") {
-      const { url, method, payload } = apiAction;
-
-      store.dispatch({ type: "api/request_START", payload: { url, method } });
+    const { url, method, payload, name } = apiAction;
+    if (apiAction.type === `api/request[${name}]`) {
+      store.dispatch({
+        type: `api/request[${name}]-pending`,
+        payload: { url, method },
+      });
 
       try {
         const config = {
@@ -24,13 +26,13 @@ export const apiMiddleware: Middleware =
         const response = await axios(config);
 
         store.dispatch({
-          type: "api/request_SUCCESS",
+          type: `api/request[${name}]-succsess`,
           payload: response.data,
           meta: { method, url },
         });
       } catch (error) {
         store.dispatch({
-          type: "api/request_ERROR",
+          type: `api/request[${name}]-error`,
           payload: error as Error,
           meta: { method, url },
         });

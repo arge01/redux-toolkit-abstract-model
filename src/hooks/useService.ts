@@ -65,18 +65,18 @@ export function useService<T, R = unknown>({
   }, []);
 
   useEffect(() => {
-    if (u && actions && trigger) {
+    if (name && u && actions && trigger) {
       const action: ReducerAction = {
         url: u,
-        type: "api/request",
+        type: `api/request[${name as string}]`,
         method,
         payload: requestData,
       };
 
-      dispatch(action);
+      dispatch({ ...action, name });
       setTrigger(false);
     }
-  }, [trigger, requestData, u, actions, dispatch, method]);
+  }, [name, trigger, requestData, u, actions, dispatch, method]);
 
   return [
     data as Model<T>,

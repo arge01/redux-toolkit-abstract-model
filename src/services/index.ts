@@ -64,6 +64,7 @@ export interface ReducerAction {
 }
 
 export interface PayloadAction<T = unknown> {
+  name: string;
   type: string;
   url: string;
   method: Method;
