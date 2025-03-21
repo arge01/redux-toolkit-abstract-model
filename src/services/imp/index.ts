@@ -1,14 +1,12 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { ImpService } from "./ImpService";
 
 export interface MODEL {
-  id: number;
-  title: string;
-  desc: string;
+  [key: string]: any;
 }
 
 export interface REQUEST {
-  title: string;
-  desc: string;
+  [key: string]: any;
 }
 
 export interface DELETE {
