@@ -1,6 +1,8 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { ImpService } from "./ImpService";
 
+export type ErrorType = any;
+
 export interface MODEL {
   [key: string]: any;
 }

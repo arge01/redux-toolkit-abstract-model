@@ -3,6 +3,11 @@ import type { SetStateAction } from "react";
 import { createContext, useContext } from "react";
 import { LayoutProps } from ".";
 
+export interface User {
+  name: string;
+  email: string;
+}
+
 export type LayoutProviderValue = {
   header?: LayoutProps["header"];
   setHeader?: React.Dispatch<React.SetStateAction<LayoutProps["header"]>>;

@@ -1,5 +1,8 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { Middleware } from "@reduxjs/toolkit";
+import { toast } from "react-toastify";
 import { PayloadAction } from "@/services";
+import { ErrorType } from "@/services/imp";
 import { fetchMiddleware } from "./fetchMiddleware";
 
 export const apiMiddleware: Middleware =
@@ -21,7 +24,8 @@ export const apiMiddleware: Middleware =
           payload: response.data,
           meta: { method, url },
         });
-      } catch (error) {
+      } catch (error: ErrorType) {
+        toast.error(`[${method}] ${error?.message}`);
         store.dispatch({
           type: `api/request[${name}]-error`,
           payload: error as Error,

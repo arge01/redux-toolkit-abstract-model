@@ -1,10 +1,14 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { z } from "zod";
 import { useEffect, useState } from "react";
 import { SubmitHandler } from "react-hook-form";
+import { toast } from "react-toastify";
 import { Form } from "@/components/forms";
 import FormProvider from "@/components/forms/Provider";
+import { User } from "@/components/layout/Provider";
 import { fetchMiddleware } from "@/middleware/fetchMiddleware";
-import { setToken, tokenFlush } from "@/utils/token";
+import { type ErrorType } from "@/services/imp";
+import { setUser, setToken, tokenFlush } from "@/utils/token";
 
 const userSchema = z.object({
   email: z.string().email("Invalid email address"),
@@ -32,16 +36,20 @@ const App = () => {
 
     try {
       const response = await fetchMiddleware("/login", "POST", data);
-      const { token } = response.data;
+      const user = response.data;
       setLoading(false);
 
-      if (token) {
-        setToken(token);
+      if (user?.token) {
+        setUser(user?.user || ({} as User));
+        setToken(user?.token);
+
         window.location.href =
           queryParams.get("redirect") || `${protocol}//${host}/`;
       }
-    } catch (error) {
+    } catch (error: ErrorType) {
       setLoading(false);
+      tokenFlush();
+      toast.error(error.message);
       console.error(error);
     }
   };

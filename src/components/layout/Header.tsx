@@ -1,7 +1,8 @@
 import { useState } from "react";
-import { FaBars, FaTimes } from "react-icons/fa";
+import { FaBars, FaRegUserCircle, FaTimes } from "react-icons/fa";
 import { Link, NavLink } from "react-router-dom";
 import { routers } from "@/router/links";
+import { getUser } from "@/utils/token";
 
 const Header = () => {
   const [nav, setNav] = useState(false);
@@ -37,25 +38,15 @@ const Header = () => {
                   </NavLink>
                 </li>
               ))}
-              <li>
-                <NavLink
-                  to="/sign-in"
-                  className={({ isActive }) =>
-                    `block p-3 rounded-lg text-gray-700 border-b border-gray-100 hover:bg-[#000] hover:bg-[#000] md:border-0 md:hover:text-white ${
-                      isActive ? "bg-[#000] text-white rounded-lg" : ""
-                    }`
-                  }
-                >
-                  Sign In
-                </NavLink>
-              </li>
-              {/* Add more links here */}
             </ul>
             <button
-              className="mt-4 md:mt-0 rounded-full bg-[#000] py-2 px-4 border border-transparent text-center text-sm text-white transition-all shadow-md hover:shadow-lg focus:bg-slate-700"
+              className="relative mt-4 flex nowrap items-center gap-2 md:mt-0 rounded-full bg-[#000] py-[7.5px] px-[15px] border border-transparent text-center text-sm text-white transition-all shadow-md hover:shadow-lg focus:bg-slate-700"
               type="button"
             >
-              Sign Up Now
+              <i className="bg-[#000] absolute p-[7px] border border-[#fff] rounded-[50%] left-[-5px] bottom-[3px]">
+                <FaRegUserCircle size={17} />
+              </i>
+              <span className="pl-[20px]">{getUser().name}</span>
             </button>
           </div>
 
