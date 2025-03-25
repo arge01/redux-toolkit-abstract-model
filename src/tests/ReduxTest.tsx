@@ -11,11 +11,10 @@ function Test() {
   const post = () => dispatch.post({ title: "New title", desc: "New desc" });
   const put = () =>
     dispatch.put(1, {
-      id: 1,
       title: "Put Update title",
       desc: "Put Update desc",
     });
-  const patch = () => dispatch.patch(1, { id: 2, title: "Patch Update title" });
+  const patch = () => dispatch.patch(1, { title: "Patch Update title" });
   const del = () => dispatch.delete(2);
 
   useEffect(() => {

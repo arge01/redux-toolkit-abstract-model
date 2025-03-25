@@ -7,7 +7,6 @@ export interface MODEL {
 }
 
 export interface REQUEST {
-  id?: number;
   title: string;
   desc: string;
 }
