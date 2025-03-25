@@ -1,9 +1,10 @@
 import { z } from "zod";
+import { useEffect, useState } from "react";
 import { SubmitHandler } from "react-hook-form";
 import { Form } from "@/components/forms";
 import FormProvider from "@/components/forms/Provider";
 import { fetchMiddleware } from "@/middleware/fetchMiddleware";
-import { setToken } from "@/utils/token";
+import { setToken, tokenFlush } from "@/utils/token";
 
 const userSchema = z.object({
   email: z.string().email("Invalid email address"),
@@ -13,16 +14,34 @@ const userSchema = z.object({
 type UserFormData = z.infer<typeof userSchema>;
 
 const App = () => {
+  const [loading, setLoading] = useState<boolean>(false);
+
+  const queryParams = new URLSearchParams(window.location.search);
+  const { protocol, host } = window.location;
+
+  useEffect(() => {
+    tokenFlush();
+
+    if (!queryParams.get("redirect")) {
+      window.location.href = `${protocol}//${host}/`;
+    }
+  }, []);
+
   const handleSubmit: SubmitHandler<UserFormData> = async (data) => {
+    setLoading(true);
+
     try {
       const response = await fetchMiddleware("/login", "POST", data);
       const { token } = response.data;
+      setLoading(false);
 
       if (token) {
         setToken(token);
-        window.location.href = "/";
+        window.location.href =
+          queryParams.get("redirect") || `${protocol}//${host}/`;
       }
     } catch (error) {
+      setLoading(false);
       console.error(error);
     }
   };
@@ -101,7 +120,9 @@ const App = () => {
               placeholder="Password"
             />
             <div className="flex w-full justify-end">
-              <Form.Button type="submit">Submit</Form.Button>
+              <Form.Button loading={loading} type="submit">
+                Submit
+              </Form.Button>
             </div>
           </Form>
         </FormProvider>
