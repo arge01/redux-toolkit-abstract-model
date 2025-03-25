@@ -47,7 +47,11 @@ export interface Headers {
 export interface Model<T> {
   entity?: T;
   entities?: T[];
+  criteria?: T[];
   loading: boolean;
+  findSuccess?: boolean;
+  findAllSuccess?: boolean;
+  findCriteriaSuccess?: boolean;
   success: boolean;
   error?: E | string | undefined;
   deleted?: boolean;

@@ -14,6 +14,7 @@ interface ButtonProps {
     | "dark"
     | "link";
   loading?: boolean;
+  type?: "button" | "submit" | "reset";
 }
 
 const Button: React.FC<ButtonProps> = ({
@@ -21,6 +22,7 @@ const Button: React.FC<ButtonProps> = ({
   onClick,
   variant = "primary",
   loading = false,
+  type = "button",
 }) => {
   const baseClasses = "font-bold py-2 px-4 rounded";
   const variantClasses = {
@@ -37,7 +39,7 @@ const Button: React.FC<ButtonProps> = ({
 
   return (
     <button
-      type="button"
+      type={type}
       className={`relative flex item-center ${loading ? "loading" : ""} justify-center ${baseClasses} ${variantClasses[variant]}`}
       onClick={onClick}
       disabled={loading}

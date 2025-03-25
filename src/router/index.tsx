@@ -4,6 +4,7 @@ import Test from "@/tests/ReduxTest";
 import About from "@/views/About";
 import Home from "@/views/Home";
 import NotFound from "@/views/NotFound";
+import Login from "@/views/auth/Login";
 import Groups from "@/views/simulation/Gruops";
 
 const router = createBrowserRouter([
@@ -14,6 +15,15 @@ const router = createBrowserRouter([
       {
         index: true,
         element: <Home />,
+      },
+      {
+        path: "auth",
+        children: [
+          {
+            path: "login",
+            element: <Login />,
+          },
+        ],
       },
       {
         path: "about",

@@ -4,11 +4,14 @@ import { createContext, useContext } from "react";
 import { LayoutProps } from ".";
 
 export type LayoutProviderValue = {
-  header: LayoutProps["header"];
-  setHeader: React.Dispatch<React.SetStateAction<LayoutProps["header"]>>;
+  header?: LayoutProps["header"];
+  setHeader?: React.Dispatch<React.SetStateAction<LayoutProps["header"]>>;
 
-  footer: LayoutProps["footer"];
-  setFooter: React.Dispatch<React.SetStateAction<LayoutProps["footer"]>>;
+  footer?: LayoutProps["footer"];
+  setFooter?: React.Dispatch<React.SetStateAction<LayoutProps["footer"]>>;
+
+  token: LayoutProps["token"];
+  setToken: LayoutProps["setToken"];
 };
 
 type Props = {
@@ -23,6 +26,11 @@ export const initialLayoutProvider: LayoutProviderValue = {
   },
   footer: undefined,
   setFooter: function (_: SetStateAction<boolean | undefined>): void {
+    throw new Error("Function not implemented.");
+  },
+
+  token: null,
+  setToken: function (_: SetStateAction<null | string>): void {
     throw new Error("Function not implemented.");
   },
 };

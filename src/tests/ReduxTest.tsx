@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import Button from "@/components/forms/Buttons";
 import { useService } from "@/hooks/useService";
 import { type MODEL, REQUEST, services } from "@/services/test";
@@ -5,13 +6,23 @@ import { type MODEL, REQUEST, services } from "@/services/test";
 function Test() {
   const [test, dispatch] = useService<MODEL, REQUEST>(services);
 
-  const get = () => dispatch.get();
+  const get = () => dispatch.get(1);
   const all = () => dispatch.all();
   const post = () => dispatch.post({ title: "New title", desc: "New desc" });
   const put = () =>
-    dispatch.put({ id: 1, title: "Update title", desc: "Update desc" });
-  const patch = () => dispatch.patch({ title: "Update title" });
-  const del = () => dispatch.delete(Number(test.entity?.id));
+    dispatch.put(1, {
+      id: 1,
+      title: "Put Update title",
+      desc: "Put Update desc",
+    });
+  const patch = () => dispatch.patch(1, { id: 2, title: "Patch Update title" });
+  const del = () => dispatch.delete(2);
+
+  useEffect(() => {
+    if (test.findSuccess) {
+      dispatch.all();
+    }
+  }, [test.findSuccess]);
 
   return (
     <div className="flex flex-wrap w-full p-10">
@@ -23,16 +34,20 @@ function Test() {
       </div>
 
       <div className="w-full flex flex-wrap py-5">
-        <h1 className="w-full text-[1.3rem] font-bold">
-          {test.entity?.title || "Data"}
-        </h1>
-        <p className="w-full py-3">{test.entity?.desc}</p>
+        <h1 className="w-full text-[1.3rem] font-bold">Data</h1>
+        <p className="w-full py-3">
+          <pre>{JSON.stringify(test.entity, null, 2)}</pre>
+        </p>
       </div>
 
       <div className="w-full flex flex-wrap py-5">
         <h1 className="w-full text-[1.3rem] font-bold">Delete</h1>
         <p className="w-full py-3">
-          {test.success ? test.deleted : "No action"}
+          {typeof test.deleted !== "undefined"
+            ? test.deleted
+              ? "Deleted"
+              : "No Deleted"
+            : ""}
         </p>
       </div>
 
@@ -50,7 +65,7 @@ function Test() {
           ALL
         </Button>
         <Button loading={test.loading} variant="primary" onClick={get}>
-          GET
+          GET [1]
         </Button>
         <Button loading={test.loading} variant="success" onClick={post}>
           POST
@@ -62,7 +77,7 @@ function Test() {
           PATCH
         </Button>
         <Button loading={test.loading} variant="danger" onClick={del}>
-          DELETE
+          DELETE [2]
         </Button>
       </div>
     </div>

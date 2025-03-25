@@ -17,11 +17,12 @@ export type UseServiceReturn<T, R = unknown> = [
   data: Model<T>,
   trigger: {
     all: () => void;
-    get: () => void;
+    get: (id: number | string) => void;
+    criteria: (c: Patch<T>[]) => void;
     post: (req: R) => void;
-    put: (req: T | undefined) => void;
+    put: (id: number | string, req: R) => void;
     delete: (id: Del) => void;
-    patch: (req: Patch<T>) => void;
+    patch: (id: number | string, req: Patch<T>) => void;
   },
 ];
 
@@ -32,9 +33,9 @@ export function useService<T, R = unknown>({
 }: UseServiceOptions): UseServiceReturn<T, R> {
   const [u, setU] = useState<string>(url as "");
   const [trigger, setTrigger] = useState<boolean>(false);
-  const [requestData, setRequestData] = useState<R | T | Patch<T> | undefined>(
-    undefined
-  );
+  const [requestData, setRequestData] = useState<
+    R | T | Patch<T> | Patch<T>[] | undefined
+  >(undefined);
   const [method, setMethod] = useState<Method>("GET");
 
   const data = useSelector((state: RootState) => state[name]);
@@ -50,6 +51,36 @@ export function useService<T, R = unknown>({
     []
   );
 
+  const triggerGetRequest = useCallback(
+    (method: Method, id: number | string) => {
+      setU(`${url}/${id}`);
+      setRequestData(undefined);
+      setMethod(method);
+      setTrigger(true);
+    },
+    []
+  );
+
+  const triggerPutRequest = useCallback(
+    (method: Method, id: number | string, req: R) => {
+      setU(`${url}/${id}`);
+      setRequestData(req);
+      setMethod(method);
+      setTrigger(true);
+    },
+    []
+  );
+
+  const triggerPatchRequest = useCallback(
+    (method: Method, id: number | string, req: Patch<T>) => {
+      setU(`${url}/${id}`);
+      setRequestData(req);
+      setMethod(method);
+      setTrigger(true);
+    },
+    []
+  );
+
   const triggerAllRequest = useCallback((method: Method) => {
     setU(`${url}/all`);
     setRequestData(undefined);
@@ -58,11 +89,21 @@ export function useService<T, R = unknown>({
   }, []);
 
   const triggerDeleteRequest = useCallback((method: Method, id: Del) => {
-    setU(`${url}/delete?id=${id}`);
+    setU(`${url}/${id}`);
     setRequestData(undefined);
     setMethod(method);
     setTrigger(true);
   }, []);
+
+  const triggerCriteriaRequest = useCallback(
+    (method: Method, req: Patch<T>[]) => {
+      setU(`${url}/criteria`);
+      setRequestData(req);
+      setMethod(method);
+      setTrigger(true);
+    },
+    []
+  );
 
   useEffect(() => {
     if (name && u && actions && trigger) {
@@ -82,11 +123,13 @@ export function useService<T, R = unknown>({
     data as Model<T>,
     {
       all: () => triggerAllRequest("GET"),
-      get: () => triggerRequest("GET"),
+      get: (id: number | string) => triggerGetRequest("GET", id),
+      criteria: (req: Patch<T>[]) => triggerCriteriaRequest("POST", req),
       post: (req: R) => triggerRequest("POST", req),
-      put: (req: T | undefined) => triggerRequest("PUT", req),
+      put: (id: number | string, req: R) => triggerPutRequest("PUT", id, req),
       delete: (req: Del) => triggerDeleteRequest("DELETE", req),
-      patch: (req: Patch<T>) => triggerRequest("PATCH", req),
+      patch: (id: number | string, req: Patch<T>) =>
+        triggerPatchRequest("PATCH", id, req),
     },
   ];
 }

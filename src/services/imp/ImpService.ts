@@ -39,6 +39,12 @@ export abstract class ImpService<T> {
         success: true,
         entity: action.payload,
       }),
+      criteria: (state: Model<T>, action: PayloadAction<T>) => ({
+        ...state,
+        loading: false,
+        success: true,
+        entity: action.payload,
+      }),
       post: (state: Model<T>, action: PayloadAction<T>) => ({
         ...state,
         loading: false,
@@ -91,9 +97,13 @@ export abstract class ImpService<T> {
           .addCase(
             `api/request[${this.name}]-succsess`,
             (state: Model<T>, action: PayloadAction<T | T[]>) => {
+              state.findSuccess = undefined;
+              state.findAllSuccess = undefined;
+              state.findCriteriaSuccess = undefined;
+              state.error = undefined;
+
               state.loading = false;
               state.success = true;
-              state.error = undefined;
 
               const method = action.meta?.method;
               const payload = action.payload;
@@ -101,21 +111,33 @@ export abstract class ImpService<T> {
               switch (method) {
                 case "GET":
                   if ((action.meta?.url || "").search("/all") > -1) {
+                    state.findAllSuccess = true;
                     state.entities = payload as T[];
+                  } else if (
+                    (action.meta?.url || "").search("/criteria") > -1
+                  ) {
+                    state.findCriteriaSuccess = true;
+                    state.criteria = payload as T[];
                   } else {
+                    state.findSuccess = true;
                     state.entity = payload as T;
                   }
                   break;
                 case "POST":
+                  state.findSuccess = true;
                   state.entity = payload as T;
                   break;
                 case "PUT":
+                  state.findSuccess = true;
                   state.entity = payload as T;
                   break;
                 case "PATCH":
+                  state.findSuccess = true;
                   state.entity = payload as T;
                   break;
                 case "DELETE":
+                  state.findSuccess =
+                    (payload as boolean) === true ? true : undefined;
                   state.deleted = (payload as boolean) || false;
                   break;
                 default:

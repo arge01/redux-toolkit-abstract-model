@@ -1,6 +1,6 @@
 import { Middleware } from "@reduxjs/toolkit";
-import axios from "axios";
 import { PayloadAction } from "@/services";
+import { fetchMiddleware } from "./fetchMiddleware";
 
 export const apiMiddleware: Middleware =
   (store) => (next) => async (action) => {
@@ -14,16 +14,7 @@ export const apiMiddleware: Middleware =
       });
 
       try {
-        const config = {
-          method,
-          url: `${import.meta.env.VITE_API_URL}${url}`,
-          data: payload,
-          headers: {
-            "Content-Type": "Application/JSON",
-          },
-        };
-
-        const response = await axios(config);
+        const response = await fetchMiddleware(url, method, payload);
 
         store.dispatch({
           type: `api/request[${name}]-succsess`,
