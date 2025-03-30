@@ -1,79 +1,59 @@
+import { z } from "zod";
+import { useState } from "react";
 import { IoEyeSharp } from "react-icons/io5";
 import { useNavigate } from "react-router-dom";
 import Card from "@/components/card";
-import DataTable, {
-  ActionProps,
-  ColumnProps,
-  HeaderProps,
-} from "@/components/datatable";
+import DataTable, { ActionProps, HeaderProps } from "@/components/datatable";
+import { ModalProps } from "@/components/datatable/Modal";
+import { Form } from "@/components/forms";
 import { withLayout } from "@/components/layout/withLayout";
-import { Model } from "@/services";
-
-type Data = { date: string; key: string };
+import { useService } from "@/hooks/useService";
+import { columns, MODEL, REQUEST, services } from "@/services/tournamed";
 
 function Home() {
+  const [tournamed, dispatch] = useService<MODEL, REQUEST>(services);
+
+  const [show, setShow] = useState<boolean>(false);
+
+  const createSchema = z.object({
+    name: z.string().nonempty(),
+    desc: z.string().min(3, "You must be at least 3 characters"),
+  });
+
+  const content = () => (
+    <>
+      <Form.Input name="name" placeholder="Name" />{" "}
+      <Form.Textarea name="desc" placeholder="Desc" />
+    </>
+  );
+
+  const handleSubmit = (data: REQUEST) => {
+    console.log("data: ", data);
+  };
+
+  const modal: ModalProps<REQUEST> = {
+    title: "Create Tournamed",
+    show,
+    setShow,
+    content: content(),
+    defaultValues: {
+      name: "",
+      desc: "",
+    },
+    schema: createSchema,
+    handleSubmit,
+  };
+
   const navigate = useNavigate();
 
-  const columns: ColumnProps[] = [
-    {
-      key: "date",
-      title: "Date",
-    },
-    {
-      key: "key",
-      title: "Key",
-    },
-  ];
-
-  const data: Data[] = [
-    {
-      date: new Date().toDateString(),
-      key: "$2y$10$NxUjmQJKy0Iw66Y4.FoJKe4SHk2/xL4v06b9lTLXxvL5KiBz16iyC",
-    },
-    {
-      date: new Date().toDateString(),
-      key: "$2y$10$9wqMnVG6wNR0DkrnhKbbL.f/bChsvz1rSwJ84Y7JcaoaNLgnfb4z2",
-    },
-    {
-      date: new Date().toDateString(),
-      key: "$2y$10$NxUjmQJKy0Iw66Y4.FoJKe4SHk2/xL4v06b9lTLXxvL5KiBz16iyC",
-    },
-    {
-      date: new Date().toDateString(),
-      key: "$2y$10$9wqMnVG6wNR0DkrnhKbbL.f/bChsvz1rSwJ84Y7JcaoaNLgnfb4z2",
-    },
-    {
-      date: new Date().toDateString(),
-      key: "$2y$10$NxUjmQJKy0Iw66Y4.FoJKe4SHk2/xL4v06b9lTLXxvL5KiBz16iyC",
-    },
-    {
-      date: new Date().toDateString(),
-      key: "$2y$10$9wqMnVG6wNR0DkrnhKbbL.f/bChsvz1rSwJ84Y7JcaoaNLgnfb4z2",
-    },
-    {
-      date: new Date().toDateString(),
-      key: "$2y$10$NxUjmQJKy0Iw66Y4.FoJKe4SHk2/xL4v06b9lTLXxvL5KiBz16iyC",
-    },
-    {
-      date: new Date().toDateString(),
-      key: "$2y$10$9wqMnVG6wNR0DkrnhKbbL.f/bChsvz1rSwJ84Y7JcaoaNLgnfb4z2",
-    },
-    {
-      date: new Date().toDateString(),
-      key: "$2y$10$NxUjmQJKy0Iw66Y4.FoJKe4SHk2/xL4v06b9lTLXxvL5KiBz16iyC",
-    },
-    {
-      date: new Date().toDateString(),
-      key: "$2y$10$NxUjmQJKy0Iw66Y4.FoJKe4SHk2/xL4v06b9lTLXxvL5KiBz16iyC",
-    },
-  ];
-
   const header: HeaderProps = {
-    newAction: () => navigate("play/gruops/key?new-key"),
+    newAction: () => {
+      setShow(true);
+    },
     searchAction: () => "search",
   };
 
-  const action: ActionProps<{ date: string; key: string }> = {
+  const action: ActionProps<MODEL> = {
     key: "action",
     actions: [
       {
@@ -85,19 +65,16 @@ function Home() {
     ],
   };
 
-  const rows: Model<Data> = {
-    loading: false,
-    success: true,
-    entities: data,
-  };
   return (
     <Card>
       <Card.Item className="w-full">
-        <DataTable<Data>
+        <DataTable<MODEL, REQUEST>
           header={header}
           columns={columns}
-          data={rows}
+          data={tournamed}
           action={action}
+          dispatch={dispatch}
+          modal={modal}
         />
       </Card.Item>
     </Card>

@@ -13,17 +13,19 @@ export type UseServiceOptions = {
 export type Patch<T> = { [K in keyof T]?: T[K] };
 export type Del = number;
 
+export type Dispatch<T, R> = {
+  all: () => void;
+  get: (id: number | string) => void;
+  criteria: (c: Patch<T>[]) => void;
+  post: (req: R) => void;
+  put: (id: number | string, req: R) => void;
+  delete: (id: Del) => void;
+  patch: (id: number | string, req: Patch<T>) => void;
+};
+
 export type UseServiceReturn<T, R = unknown> = [
   data: Model<T>,
-  trigger: {
-    all: () => void;
-    get: (id: number | string) => void;
-    criteria: (c: Patch<T>[]) => void;
-    post: (req: R) => void;
-    put: (id: number | string, req: R) => void;
-    delete: (id: Del) => void;
-    patch: (id: number | string, req: Patch<T>) => void;
-  },
+  trigger: Dispatch<T, R>,
 ];
 
 export function useService<T, R = unknown>({

@@ -1,8 +1,10 @@
 /* eslint-disable indent */
-import { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { RiRefreshLine } from "react-icons/ri";
 import { TbDatabaseOff } from "react-icons/tb";
+import { Dispatch } from "@/hooks/useService";
 import { Model, Pagination } from "@/services";
+import Modal, { ModalProps } from "./Modal";
 import TBody from "./TBody";
 import Column from "./THead";
 
@@ -26,21 +28,31 @@ export type HeaderProps = {
   searchAction: () => void;
 };
 
-export type DataTableProps<T> = {
+export type DataTableProps<T, R> = {
   columns: ColumnProps[];
   action: ActionProps<T>;
   data: Model<T>;
+  dispatch?: Dispatch<T, R>;
   header?: HeaderProps;
   pagination?: Pagination;
+  modal?: ModalProps<R>;
 };
 
-function DataTable<T>({
+function DataTable<T, R>({
   action,
   columns,
   data,
   header = undefined,
   pagination = undefined,
-}: DataTableProps<T>) {
+  dispatch = undefined,
+  modal = undefined,
+}: DataTableProps<T, R>) {
+  useEffect(() => {
+    if (dispatch) {
+      dispatch.all();
+    }
+  }, []);
+
   const [filterShow, setFilterShow] = useState<boolean>(false);
 
   const [activeFilterColumn, setActiveFilterColumn] = useState<ColumnProps>(
@@ -56,6 +68,11 @@ function DataTable<T>({
       }
     }'
     >
+      {modal?.show && (
+        <section className="modal fixed top-0 left-0">
+          <Modal<R> modal={modal}>{modal.content}</Modal>
+        </section>
+      )}
       <div className="min-h-130 overflow-x-auto">
         {header && (
           <section className="flex w-full items-center justify-between gap-5 pb-5">
@@ -153,6 +170,7 @@ function DataTable<T>({
               </button>
               <button
                 disabled={data.loading}
+                onClick={dispatch?.all}
                 className={`${data.loading ? "loading" : ""}`}
               >
                 <RiRefreshLine size={20} />

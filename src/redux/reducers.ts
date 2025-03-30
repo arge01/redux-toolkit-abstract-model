@@ -1,12 +1,12 @@
 import { combineReducers } from "@reduxjs/toolkit";
-import test from "@/services/test";
+import tournamed from "@/services/tournamed";
 
 export interface Reducers {
-  test: ReturnType<typeof test>;
+  tournamed: ReturnType<typeof tournamed>;
 }
 
 const rootReducer = combineReducers({
-  test,
+  tournamed,
 });
 
 export default rootReducer;

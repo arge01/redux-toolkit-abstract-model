@@ -8,52 +8,57 @@ import Login from "@/views/auth/Login";
 import SignUp from "@/views/auth/SignUp";
 import Groups from "@/views/simulation/Gruops";
 
-const router = createBrowserRouter([
+const router = createBrowserRouter(
+  [
+    {
+      path: "/",
+      element: <Layout />,
+      children: [
+        {
+          index: true,
+          element: <Home />,
+        },
+        {
+          path: "auth",
+          children: [
+            {
+              path: "login",
+              element: <Login />,
+            },
+            {
+              path: "sign-up",
+              element: <SignUp />,
+            },
+          ],
+        },
+        {
+          path: "about",
+          element: <About />,
+        },
+        {
+          path: "test",
+          element: <Test />,
+        },
+        {
+          path: "play",
+          children: [
+            {
+              path: "gruops/:key",
+              element: <Groups />,
+            },
+          ],
+        },
+      ],
+    },
+    {
+      path: "*",
+      element: <NotFound />,
+    },
+  ],
   {
-    path: "/",
-    element: <Layout />,
-    children: [
-      {
-        index: true,
-        element: <Home />,
-      },
-      {
-        path: "auth",
-        children: [
-          {
-            path: "login",
-            element: <Login />,
-          },
-          {
-            path: "sign-up",
-            element: <SignUp />,
-          },
-        ],
-      },
-      {
-        path: "about",
-        element: <About />,
-      },
-      {
-        path: "test",
-        element: <Test />,
-      },
-      {
-        path: "play",
-        children: [
-          {
-            path: "gruops/:key",
-            element: <Groups />,
-          },
-        ],
-      },
-    ],
-  },
-  {
-    path: "*",
-    element: <NotFound />,
-  },
-]);
+    basename: "/",
+  }
+);
 
 function Routes() {
   return <RouterProvider router={router} />;

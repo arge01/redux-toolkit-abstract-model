@@ -12,6 +12,7 @@ export const Form = ({ children }: FormProps) => {
 
   const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+
     handleSubmit(
       (data) => data,
       (errors) => errors
@@ -37,6 +38,24 @@ Form.Input = ({ name, ...props }: FormInputProps) => {
       {...register(name)}
       {...props}
       className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+    />
+  );
+};
+
+type FormTextareaProps = {
+  name: string;
+} & React.TextareaHTMLAttributes<HTMLTextAreaElement>;
+
+Form.Textarea = ({ name, ...props }: FormTextareaProps) => {
+  const { register } = useFormContext();
+
+  return (
+    <textarea
+      {...register(name)}
+      {...props}
+      rows={4}
+      cols={25}
+      className={`w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 ${props.className || ""}`}
     />
   );
 };
