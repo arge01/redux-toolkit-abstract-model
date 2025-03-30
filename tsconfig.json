@@ -1,23 +1,11 @@
 {
-  "compilerOptions": {
-    "composite": true,
-    "target": "ES2022",
-    "lib": [
-      "ES2023"
-    ],
-    "module": "CommonJS",
-    "moduleResolution": "node",
-    "allowSyntheticDefaultImports": true,
-    "esModuleInterop": true,
-    "skipLibCheck": true,
-    "strict": true,
-    "types": [
-      "node"
-    ],
-    "noEmit": true,
-    "resolveJsonModule": true
-  },
-  "include": [
-    "vite.config.ts"
+  "files": [],
+  "references": [
+    {
+      "path": "./tsconfig.app.json"
+    },
+    {
+      "path": "./tsconfig.node.json"
+    }
   ]
 }

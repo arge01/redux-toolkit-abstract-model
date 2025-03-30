@@ -3,16 +3,13 @@
   "private": true,
   "version": "0.0.1",
   "type": "module",
-  "engines": {
-    "node": ">=18.0.0"
-  },
   "license": "UNLICENSED",
   "author": "Arif GEVENCİ",
   "author-link": "https://arifgevenci.com",
   "description": "CHAMPIONS LEAGUE SIMULATION",
   "scripts": {
     "dev": "vite",
-    "build": "tsc -b && vite build",
+    "build": "tsc -b tsconfig.node.json && vite build",
     "lint-staged": "lint-staged",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
