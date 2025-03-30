@@ -4,6 +4,8 @@ import path from "path";
 import tailwindcss from "tailwindcss";
 import { defineConfig } from "vite";
 
+const __dirname = new URL(".", import.meta.url).pathname;
+
 // https://vite.dev/config/
 export default defineConfig({
   server: {
@@ -14,7 +16,7 @@ export default defineConfig({
     alias: [
       {
         find: "@",
-        replacement: path.resolve("./src"),
+        replacement: path.resolve(__dirname, "./src"),
       },
     ],
   },
