@@ -7,8 +7,18 @@ export type Type = {
 
 export type Status = "success" | "loading" | "failed" | "invited";
 
-export interface E {
+export type Pagination = {
+  size: number;
+  page: number;
+  showing: number;
+};
+
+export interface EMessage {
   message: string;
+}
+
+export interface E {
+  message: EMessage["message"];
   name: string;
   stack: string;
   config: Config;
@@ -53,7 +63,7 @@ export interface Model<T> {
   findAllSuccess?: boolean;
   findCriteriaSuccess?: boolean;
   success: boolean;
-  error?: E | string | undefined;
+  error?: EMessage | E | string | undefined;
   deleted?: boolean;
 }
 

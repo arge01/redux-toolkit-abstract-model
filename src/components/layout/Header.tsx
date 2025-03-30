@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { FaBars, FaRegUserCircle, FaTimes } from "react-icons/fa";
+import { FaBars, FaTimes, FaUserCircle } from "react-icons/fa";
 import { Link, NavLink } from "react-router-dom";
 import { routers } from "@/router/links";
 import { getUser } from "@/utils/token";
@@ -44,7 +44,7 @@ const Header = () => {
               type="button"
             >
               <i className="bg-[#000] absolute p-[7px] border border-[#fff] rounded-[50%] left-[-5px] bottom-[3px]">
-                <FaRegUserCircle size={17} />
+                <FaUserCircle size={17} />
               </i>
               <span className="pl-[20px]">{getUser().name}</span>
             </button>

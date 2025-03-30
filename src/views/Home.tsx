@@ -7,6 +7,9 @@ import DataTable, {
   HeaderProps,
 } from "@/components/datatable";
 import { withLayout } from "@/components/layout/withLayout";
+import { Model } from "@/services";
+
+type Data = { date: string; key: string };
 
 function Home() {
   const navigate = useNavigate();
@@ -22,7 +25,7 @@ function Home() {
     },
   ];
 
-  const data: { date: string; key: string }[] = [
+  const data: Data[] = [
     {
       date: new Date().toDateString(),
       key: "$2y$10$NxUjmQJKy0Iw66Y4.FoJKe4SHk2/xL4v06b9lTLXxvL5KiBz16iyC",
@@ -81,14 +84,19 @@ function Home() {
       },
     ],
   };
+
+  const rows: Model<Data> = {
+    loading: false,
+    success: true,
+    entities: data,
+  };
   return (
     <Card>
       <Card.Item className="w-full">
-        <DataTable
-          pagination
+        <DataTable<Data>
           header={header}
           columns={columns}
-          data={data}
+          data={rows}
           action={action}
         />
       </Card.Item>

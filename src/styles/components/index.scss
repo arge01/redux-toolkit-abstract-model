@@ -1,7 +1,26 @@
+@use "@/styles/mixin"as *;
 @use "@/styles/components/header";
 @use "@/styles/components/footer";
 @use "@/styles/components/loading";
 @use '@/styles/components/tailwind';
+
+.data-table {
+  button {
+    overflow: hidden;
+
+    &:disabled {
+      cursor: no-drop;
+    }
+  }
+
+  button.loading {
+    display: flex;
+
+    svg {
+      @include animation(spin-180)
+    }
+  }
+}
 
 .table {
   thead {

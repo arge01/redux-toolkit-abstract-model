@@ -1,41 +1,48 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { z } from "zod";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { SubmitHandler } from "react-hook-form";
 import { toast } from "react-toastify";
 import { Form } from "@/components/forms";
 import FormProvider from "@/components/forms/Provider";
 import { User } from "@/components/layout/Provider";
 import { fetchMiddleware } from "@/middleware/fetchMiddleware";
-import { type ErrorType } from "@/services/imp";
-import { setUser, setToken, tokenFlush } from "@/utils/token";
+import { ErrorType } from "@/services/imp";
+import { setToken, setUser, tokenFlush } from "@/utils/token";
 
-const userSchema = z.object({
-  email: z.string().email("Invalid email address"),
-  password: z.string().min(3, "You must be at least 3 characters"),
-});
+const userSchema = z
+  .object({
+    name: z.string().min(3, "You must be at least 3 characters"),
+    email: z.string().email("Invalid email address"),
+    password: z
+      .string()
+      .min(3, "Password must be at least 3 characters")
+      .regex(/[A-Z]/, "Password must contain at least one uppercase letter")
+      .regex(/[a-z]/, "Password must contain at least one lowercase letter")
+      .regex(/[0-9]/, "Password must contain at least one number"),
+    password_confirmation: z.string(),
+  })
+  .superRefine(({ password_confirmation, password }, ctx) => {
+    if (password_confirmation !== password) {
+      ctx.addIssue({
+        code: "custom",
+        message: "The passwords did not match",
+        path: ["password_confirmation"],
+      });
+    }
+  });
 
 type UserFormData = z.infer<typeof userSchema>;
 
-function Login() {
+function SignUp() {
   const [loading, setLoading] = useState<boolean>(false);
-
-  const queryParams = new URLSearchParams(window.location.search);
   const { protocol, host } = window.location;
-
-  useEffect(() => {
-    tokenFlush();
-
-    if (!queryParams.get("redirect")) {
-      window.location.href = `${protocol}//${host}/`;
-    }
-  }, []);
 
   const handleSubmit: SubmitHandler<UserFormData> = async (data) => {
     setLoading(true);
 
     try {
-      const response = await fetchMiddleware("/login", "POST", data);
+      const response = await fetchMiddleware("/register", "POST", data);
       const user = response.data;
       setLoading(false);
 
@@ -43,21 +50,19 @@ function Login() {
         setUser(user?.user || ({} as User));
         setToken(user?.token);
 
-        window.location.href =
-          queryParams.get("redirect") || `${protocol}//${host}/`;
+        window.location.href = `${protocol}//${host}/`;
       }
     } catch (error: ErrorType) {
       setLoading(false);
       tokenFlush();
-      toast.error(error.message);
+      toast.error(error?.message);
       console.error(error);
     }
   };
-
   return (
     <div className="max-w-md w-full p-6">
       <h1 className="text-3xl font-semibold mb-6 text-black text-center">
-        Login
+        Sing Up
       </h1>
       <h1 className="text-sm font-semibold mb-6 text-gray-500 text-center">
         Join to Our Community with all time access and free{" "}
@@ -121,11 +126,17 @@ function Login() {
           defaultValues={{ email: "", password: "" }}
         >
           <Form>
+            <Form.Input name="name" placeholder="User Name" />
             <Form.Input name="email" placeholder="Email" />
             <Form.Input
               name="password"
               type="password"
               placeholder="Password"
+            />
+            <Form.Input
+              name="password_confirmation"
+              type="password"
+              placeholder="Password Confirmed"
             />
             <div className="flex w-full justify-end">
               <Form.Button loading={loading} type="submit">
@@ -137,9 +148,9 @@ function Login() {
       </div>
       <div className="mt-4 text-sm text-gray-600 text-center">
         <p>
-          Already have an account?{" "}
-          <a href="/auth/sign-up" className="text-black hover:underline">
-            Sign Up here
+          Are you already a member?{" "}
+          <a href="/auth/login" className="text-black hover:underline">
+            Login
           </a>
         </p>
       </div>
@@ -147,4 +158,4 @@ function Login() {
   );
 }
 
-export default Login;
+export default SignUp;
