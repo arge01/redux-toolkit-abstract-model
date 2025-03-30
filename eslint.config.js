@@ -13,6 +13,7 @@ export default tseslint.config(
       "tsconfig.*",
       "postcss.*",
       "tailwind.*",
+      "vercel.json",
     ],
   },
   {
