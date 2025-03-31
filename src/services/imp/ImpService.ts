@@ -39,11 +39,17 @@ export abstract class ImpService<T> {
         success: true,
         entity: action.payload,
       }),
-      criteria: (state: Model<T>, action: PayloadAction<T>) => ({
+      getCriteria: (state: Model<T>, action: PayloadAction<T>) => ({
         ...state,
         loading: false,
         success: true,
         entity: action.payload,
+      }),
+      criteria: (state: Model<T>, action: PayloadAction<T>) => ({
+        ...state,
+        loading: false,
+        success: true,
+        criteria: action.payload,
       }),
       post: (state: Model<T>, action: PayloadAction<T>) => ({
         ...state,
@@ -118,14 +124,29 @@ export abstract class ImpService<T> {
                   ) {
                     state.findCriteriaSuccess = true;
                     state.criteria = payload as T[];
+                  } else if (
+                    (action.meta?.url || "").search("/get-criteria") > -1
+                  ) {
+                    state.findSuccess = true;
+                    state.entity = payload as T;
                   } else {
                     state.findSuccess = true;
                     state.entity = payload as T;
                   }
                   break;
                 case "POST":
-                  state.findSuccess = true;
-                  state.entity = payload as T;
+                  if ((action.meta?.url || "").search("/get-criteria") > -1) {
+                    state.findSuccess = true;
+                    state.entity = payload as T;
+                  } else if (
+                    (action.meta?.url || "").search("/criteria") > -1
+                  ) {
+                    state.findCriteriaSuccess = true;
+                    state.criteria = payload as T[];
+                  } else {
+                    state.findSuccess = true;
+                    state.entity = payload as T;
+                  }
                   break;
                 case "PUT":
                   state.findSuccess = true;

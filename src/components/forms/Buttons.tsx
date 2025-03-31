@@ -46,7 +46,7 @@ const Button: React.FC<ButtonProps> = ({
     >
       {children}
       {loading && (
-        <div className="flex fixed items-center justify-center opacity-[.3] top-0 left-0 h-lvh w-full z-100 bg-dark">
+        <div className="flex fixed items-center justify-center opacity-[.3] top-0 left-0 h-lvh w-full z-1000000000000000 bg-dark">
           <svg
             aria-hidden="true"
             className="w-8 h-8 text-gray-200 animate-spin dark:text-gray-600 fill-blue-600"

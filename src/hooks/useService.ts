@@ -16,6 +16,7 @@ export type Del = number;
 export type Dispatch<T, R> = {
   all: () => void;
   get: (id: number | string) => void;
+  getCriteria: (c: Patch<T>) => void;
   criteria: (c: Patch<T>[]) => void;
   post: (req: R) => void;
   put: (id: number | string, req: R) => void;
@@ -107,6 +108,22 @@ export function useService<T, R = unknown>({
     []
   );
 
+  const triggerGetCriteriaRequest = useCallback(
+    (method: Method, c: Patch<T>) => {
+      const keys = Object.keys(c);
+      if (keys.length === 0) {
+        throw new Error("Empty object provided");
+      }
+      const key = keys[0];
+
+      setU(`${url}/get-criteria/${key}/${c[key as keyof typeof c]}`);
+      setRequestData(c);
+      setMethod(method);
+      setTrigger(true);
+    },
+    []
+  );
+
   useEffect(() => {
     if (name && u && actions && trigger) {
       const action: ReducerAction = {
@@ -126,6 +143,7 @@ export function useService<T, R = unknown>({
     {
       all: () => triggerAllRequest("GET"),
       get: (id: number | string) => triggerGetRequest("GET", id),
+      getCriteria: (c: Patch<T>) => triggerGetCriteriaRequest("GET", c),
       criteria: (req: Patch<T>[]) => triggerCriteriaRequest("POST", req),
       post: (req: R) => triggerRequest("POST", req),
       put: (id: number | string, req: R) => triggerPutRequest("PUT", id, req),

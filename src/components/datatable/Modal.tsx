@@ -2,6 +2,7 @@
 import { z } from "zod";
 import Button from "@/components/forms/Buttons";
 import FormProvider from "@/components/forms/Provider";
+import { Model } from "@/services";
 import { Form } from "../forms";
 
 export type ModalProps<T> = {
@@ -14,12 +15,13 @@ export type ModalProps<T> = {
   handleSubmit: any;
 };
 
-type Props<T> = {
+type Props<T, R> = {
   children: React.ReactNode;
-  modal: ModalProps<T>;
+  data: Model<T>;
+  modal: ModalProps<R>;
 };
 
-function Modal<T>({ children, modal }: Props<T>) {
+function Modal<T, R>({ data, children, modal }: Props<T, R>) {
   const { handleSubmit, schema, defaultValues, title, setShow } = modal;
 
   type FormType = z.infer<typeof schema>;
@@ -67,7 +69,9 @@ function Modal<T>({ children, modal }: Props<T>) {
               <Form>
                 {children}
                 <div className="flex w-full flex-wrap justify-between">
-                  <Form.Button type="submit">Submit</Form.Button>
+                  <Form.Button loading={data.loading} type="submit">
+                    Submit
+                  </Form.Button>
                   <Button variant="danger" onClick={() => setShow(false)}>
                     Close
                   </Button>

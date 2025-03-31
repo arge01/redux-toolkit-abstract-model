@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { IoEyeSharp } from "react-icons/io5";
 import { useNavigate } from "react-router-dom";
 import Card from "@/components/card";
@@ -14,6 +14,7 @@ function Home() {
   const [tournamed, dispatch] = useService<MODEL, REQUEST>(services);
 
   const [show, setShow] = useState<boolean>(false);
+  const [select, setSelect] = useState<boolean>(false);
 
   const createSchema = z.object({
     name: z.string().nonempty(),
@@ -27,9 +28,25 @@ function Home() {
     </>
   );
 
-  const handleSubmit = (data: REQUEST) => {
-    console.log("data: ", data);
+  const handleSubmit = async (data: REQUEST) => {
+    await dispatch.post(data);
+
+    setSelect(true);
   };
+
+  useEffect(() => {
+    setSelect(false);
+  }, []);
+
+  useEffect(() => {
+    if (select) {
+      if (tournamed.findSuccess) {
+        if (tournamed.entity?.key) {
+          navigate(`play/gruops/${encodeURIComponent(tournamed.entity.key)}`);
+        }
+      }
+    }
+  }, [select, tournamed.findSuccess]);
 
   const modal: ModalProps<REQUEST> = {
     title: "Create Tournamed",
@@ -37,7 +54,7 @@ function Home() {
     setShow,
     content: content(),
     defaultValues: {
-      name: "",
+      name: `Tournamed-${Number(new Date().getFullYear()) - Number(2000)}-${Number(new Date().getFullYear()) - Number(2000) + Number(1)}/`,
       desc: "",
     },
     schema: createSchema,
@@ -57,7 +74,10 @@ function Home() {
     key: "action",
     actions: [
       {
-        action: (v) => navigate(`play/gruops/key?${v.key}`),
+        action: async (v) => {
+          await dispatch.get(v.id);
+          setSelect(true);
+        },
         icon: (
           <IoEyeSharp className="hover:text-[#000]" color="#1e293b" size={18} />
         ),

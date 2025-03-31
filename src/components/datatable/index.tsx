@@ -30,7 +30,7 @@ export type HeaderProps = {
 
 export type DataTableProps<T, R> = {
   columns: ColumnProps[];
-  action: ActionProps<T>;
+  action?: ActionProps<T>;
   data: Model<T>;
   dispatch?: Dispatch<T, R>;
   header?: HeaderProps;
@@ -70,7 +70,9 @@ function DataTable<T, R>({
     >
       {modal?.show && (
         <section className="modal fixed top-0 left-0">
-          <Modal<R> modal={modal}>{modal.content}</Modal>
+          <Modal<T, R> data={data} modal={modal}>
+            {modal.content}
+          </Modal>
         </section>
       )}
       <div className="min-h-130 overflow-x-auto">
@@ -190,12 +192,14 @@ function DataTable<T, R>({
                     <Column key={k} title={v.title} />
                   ))}
 
-                  <th
-                    scope="col"
-                    className="py-2 px-0 text-end font-normal text-[10pt] font-[600] text-gray-500 --exclude-from-ordering"
-                  >
-                    {action?.actionName || "Action"}
-                  </th>
+                  {action && (
+                    <th
+                      scope="col"
+                      className="py-2 px-0 text-end font-normal text-[10pt] font-[600] text-gray-500 --exclude-from-ordering"
+                    >
+                      {action?.actionName || "Action"}
+                    </th>
+                  )}
                 </tr>
               </thead>
 
@@ -235,7 +239,7 @@ function DataTable<T, R>({
                           ))}
 
                           <td className="p-0 whitespace-nowrap text-end text-sm font-medium">
-                            {action.actions.map((actions, key) => (
+                            {action?.actions.map((actions, key) => (
                               <button
                                 key={key}
                                 disabled={data.loading}

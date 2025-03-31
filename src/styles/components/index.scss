@@ -56,3 +56,9 @@
   background: rgba(0, 0, 0, .4);
   z-index: 10000;
 }
+
+.Toastify {
+  &>div {
+    z-index: 100000000;
+  }
+}
