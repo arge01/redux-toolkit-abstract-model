@@ -25,7 +25,7 @@ export const apiMiddleware: Middleware =
           meta: { method, url },
         });
       } catch (error: ErrorType) {
-        toast.error(`[${method}] ${error?.message}`);
+        toast.error(`[${name}] [${method}] ${error?.message}`);
         store.dispatch({
           type: `api/request[${name}]-error`,
           payload: error as Error,

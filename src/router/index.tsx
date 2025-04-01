@@ -6,7 +6,9 @@ import Home from "@/views/Home";
 import NotFound from "@/views/NotFound";
 import Login from "@/views/auth/Login";
 import SignUp from "@/views/auth/SignUp";
+import Simulation from "@/views/simulation";
 import Groups from "@/views/simulation/Gruops";
+import Matches from "@/views/simulation/Matches";
 
 const router = createBrowserRouter([
   {
@@ -42,8 +44,18 @@ const router = createBrowserRouter([
         path: "play",
         children: [
           {
-            path: "gruops/:key",
-            element: <Groups />,
+            path: "groups/:key",
+            element: <Simulation />,
+            children: [
+              {
+                index: true,
+                element: <Groups />,
+              },
+              {
+                path: "matches",
+                element: <Matches />,
+              },
+            ],
           },
         ],
       },

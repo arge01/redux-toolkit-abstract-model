@@ -10,7 +10,8 @@ export type Status = "success" | "loading" | "failed" | "invited";
 export type Pagination = {
   size: number;
   page: number;
-  showing: number;
+  total?: number;
+  showing?: number;
 };
 
 export interface EMessage {
@@ -65,6 +66,7 @@ export interface Model<T> {
   success: boolean;
   error?: EMessage | E | string | undefined;
   deleted?: boolean;
+  pagination?: Pagination;
 }
 
 export type Method = "GET" | "POST" | "PUT" | "DELETE" | "PATCH";

@@ -1,26 +1,16 @@
 import { ColumnProps } from "@/components/datatable";
-import { MODEL as Groups } from "@/services/groups";
-import { MODEL as Power } from "@/services/power";
-import { MODEL as Tournamed } from "@/services/tournamed";
 import { ImpService } from "../imp/ImpService";
+import { MODEL as Matches } from "../matches";
 
 export interface MODEL {
   id: number;
   name: string;
-  colors: string;
-  country: string;
-  tournamed: Tournamed;
-  groups: Groups;
-  power: Power;
+  matches: Matches[] | null;
 }
 
 export interface REQUEST {
   name: string;
-  country: string;
-  colors: string;
-  tournamed: number;
-  groups: number;
-  power: number;
+  matches: number;
 }
 
 export interface DELETE {
@@ -29,22 +19,14 @@ export interface DELETE {
 
 export const columns: ColumnProps[] = [
   {
-    key: "country",
-    title: "Country",
-  },
-  {
     key: "name",
     title: "Name",
-  },
-  {
-    key: "colors",
-    title: "Colors",
   },
 ];
 
 export class Service extends ImpService<MODEL> {
   constructor() {
-    super("soccer", "/soccer");
+    super("groups", "/groups");
   }
 }
 

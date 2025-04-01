@@ -1,6 +1,7 @@
 import React from "react";
 
 interface ButtonProps {
+  className?: string;
   children: React.ReactNode;
   onClick?: () => void;
   variant?:
@@ -18,6 +19,7 @@ interface ButtonProps {
 }
 
 const Button: React.FC<ButtonProps> = ({
+  className = undefined,
   children,
   onClick,
   variant = "primary",
@@ -40,13 +42,13 @@ const Button: React.FC<ButtonProps> = ({
   return (
     <button
       type={type}
-      className={`relative flex item-center ${loading ? "loading" : ""} justify-center ${baseClasses} ${variantClasses[variant]}`}
+      className={`${className} relative flex item-center ${loading ? "loading" : ""} justify-center ${baseClasses} ${variantClasses[variant]}`}
       onClick={onClick}
       disabled={loading}
     >
       {children}
       {loading && (
-        <div className="flex fixed items-center justify-center opacity-[.3] top-0 left-0 h-lvh w-full z-1000000000000000 bg-dark">
+        <div className="flex fixed items-center justify-center bg-[#000] opacity-[.3] top-0 left-0 h-lvh w-full z-1000000000000000 bg-dark">
           <svg
             aria-hidden="true"
             className="w-8 h-8 text-gray-200 animate-spin dark:text-gray-600 fill-blue-600"

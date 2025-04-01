@@ -42,7 +42,7 @@ function Home() {
     if (select) {
       if (tournamed.findSuccess) {
         if (tournamed.entity?.key) {
-          navigate(`play/gruops/${encodeURIComponent(tournamed.entity.key)}`);
+          navigate(`play/groups/${encodeURIComponent(tournamed.entity.key)}`);
         }
       }
     }
@@ -54,7 +54,7 @@ function Home() {
     setShow,
     content: content(),
     defaultValues: {
-      name: `Tournamed-${Number(new Date().getFullYear()) - Number(2000)}-${Number(new Date().getFullYear()) - Number(2000) + Number(1)}/`,
+      name: `Tournamed-${Number(new Date().getFullYear())} - ${Number(new Date().getFullYear()) - Number(2000) + Number(1)}/`,
       desc: "",
     },
     schema: createSchema,

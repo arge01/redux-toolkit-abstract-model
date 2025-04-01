@@ -1,7 +1,7 @@
 import { useEffect, useState, useCallback } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { RootState } from "@/redux/store";
-import { Method, Model, ReducerAction } from "@/services";
+import { Method, Model, Pagination, ReducerAction } from "@/services";
 import { actions as actionsType } from "@/services/imp";
 
 export type UseServiceOptions = {
@@ -17,7 +17,7 @@ export type Dispatch<T, R> = {
   all: () => void;
   get: (id: number | string) => void;
   getCriteria: (c: Patch<T>) => void;
-  criteria: (c: Patch<T>[]) => void;
+  criteria: (c: Patch<T>[], pagination?: Pagination) => void;
   post: (req: R) => void;
   put: (id: number | string, req: R) => void;
   delete: (id: Del) => void;
@@ -99,8 +99,15 @@ export function useService<T, R = unknown>({
   }, []);
 
   const triggerCriteriaRequest = useCallback(
-    (method: Method, req: Patch<T>[]) => {
+    (method: Method, req: Patch<T>[], pagination?: Pagination) => {
       setU(`${url}/criteria`);
+
+      if (pagination) {
+        setU(
+          `${url}/criteria/pagination/${pagination.page}/${pagination.size}?page=${pagination.page}`
+        );
+      }
+
       setRequestData(req);
       setMethod(method);
       setTrigger(true);
@@ -144,7 +151,8 @@ export function useService<T, R = unknown>({
       all: () => triggerAllRequest("GET"),
       get: (id: number | string) => triggerGetRequest("GET", id),
       getCriteria: (c: Patch<T>) => triggerGetCriteriaRequest("GET", c),
-      criteria: (req: Patch<T>[]) => triggerCriteriaRequest("POST", req),
+      criteria: (req: Patch<T>[], pagination?: Pagination) =>
+        triggerCriteriaRequest("POST", req, pagination),
       post: (req: R) => triggerRequest("POST", req),
       put: (id: number | string, req: R) => triggerPutRequest("PUT", id, req),
       delete: (req: Del) => triggerDeleteRequest("DELETE", req),

@@ -10,7 +10,7 @@ export function CardItem(props: CardItemProps) {
   return (
     <section
       style={props.style}
-      className={`p-7 shadow-sm rounded-md bg-white ${props.className}`}
+      className={`p-7 shadow-sm rounded-md bg-white mb-[5px] ${props.className}`}
     >
       {props.children}
     </section>

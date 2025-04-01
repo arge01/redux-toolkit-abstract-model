@@ -44,6 +44,7 @@ export abstract class ImpService<T> {
         loading: false,
         success: true,
         entity: action.payload,
+        entities: action.payload,
       }),
       criteria: (state: Model<T>, action: PayloadAction<T>) => ({
         ...state,
@@ -141,8 +142,19 @@ export abstract class ImpService<T> {
                   } else if (
                     (action.meta?.url || "").search("/criteria") > -1
                   ) {
+                    const p: any = (payload as any)?.data
+                      ? (payload as any).data
+                      : payload;
                     state.findCriteriaSuccess = true;
-                    state.criteria = payload as T[];
+                    state.criteria = p as T[];
+
+                    state.findAllSuccess = true;
+                    state.entities = p as T[];
+                    state.pagination = {
+                      size: (payload as any).to,
+                      page: (payload as any).current_page,
+                      total: (payload as any).total,
+                    };
                   } else {
                     state.findSuccess = true;
                     state.entity = payload as T;

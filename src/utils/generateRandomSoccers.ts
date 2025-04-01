@@ -1,3 +1,4 @@
+import { MODEL as Groups } from "@/services/groups";
 import { MODEL as Soccer } from "@/services/soccer";
 import { MODEL as Tournamed } from "@/services/tournamed";
 
@@ -83,8 +84,11 @@ const generateSoccerName = (): string => {
   return `${prefix} ${suffix}`;
 };
 
-export const generateRandomSoccers = (count: number): Soccer[] =>
-  Array.from({ length: count }, () => {
+export const generateRandomSoccers = (
+  count: number,
+  groups: Groups[]
+): Soccer[] => {
+  const allTeams = Array.from({ length: count }, () => {
     const id = 0;
     const tournamed = {} as Tournamed;
     const name = generateSoccerName();
@@ -94,11 +98,13 @@ export const generateRandomSoccers = (count: number): Soccer[] =>
     return {
       id,
       tournamed,
+      groups: null,
       name,
       country: isTurkishClub
         ? "Turkey"
         : COUNTRIES[Math.floor(Math.random() * COUNTRIES.length)],
       power: {
+        id: 0,
         field: Math.floor(Math.random() * 50) + 50,
         outfield: Math.floor(Math.random() * 50) + 50,
         power: Math.floor(Math.random() * 50) + 50,
@@ -110,3 +116,17 @@ export const generateRandomSoccers = (count: number): Soccer[] =>
         : COLORS[Math.floor(Math.random() * COLORS.length)],
     };
   });
+
+  const shuffledTeams = [...allTeams].sort(() => Math.random() - 0.5);
+
+  const teamsPerGroup = Math.floor(count / groups.length);
+
+  return groups.flatMap((group, groupIndex) => {
+    const startIndex = groupIndex * teamsPerGroup;
+    const endIndex = startIndex + teamsPerGroup;
+    return shuffledTeams.slice(startIndex, endIndex).map((team) => ({
+      ...team,
+      groups: group,
+    }));
+  });
+};

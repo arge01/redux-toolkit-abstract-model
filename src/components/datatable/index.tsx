@@ -47,11 +47,21 @@ function DataTable<T, R>({
   dispatch = undefined,
   modal = undefined,
 }: DataTableProps<T, R>) {
+  const [filterData, setFilterData] = useState<T[]>(data.entities || []);
+
   useEffect(() => {
-    if (dispatch) {
-      dispatch.all();
+    if (dispatch?.all) {
+      if (!data.findAllSuccess) {
+        dispatch.all();
+      }
     }
-  }, []);
+  }, [data.findAllSuccess]);
+
+  useEffect(() => {
+    if (data.entities) {
+      setFilterData(data.entities);
+    }
+  }, [data.entities]);
 
   const [filterShow, setFilterShow] = useState<boolean>(false);
 
@@ -76,92 +86,98 @@ function DataTable<T, R>({
         </section>
       )}
       <div className="min-h-130 overflow-x-auto">
-        {header && (
-          <section className="flex w-full items-center justify-between gap-5 pb-5">
-            <div className="w-1/2 max-w-sm min-w-[200px]">
-              <div className="flex items-center relative">
-                <div className="absolute top-1 left-1 flex items-center">
-                  <button
-                    onClick={() => setFilterShow(!filterShow)}
-                    disabled={data.loading}
-                    className="h-[32.5px] rounded border border-transparent py-1 px-1.5 text-center flex items-center text-sm transition-all text-slate-600"
-                  >
-                    <span
-                      id="dropdownSpan"
-                      className="text-ellipsis overflow-hidden text-[#bdbdbd] text-[9pt]"
-                    >
-                      {activeFilterColumn.title}
-                    </span>
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      stroke-width="1.5"
-                      stroke="currentColor"
-                      className="text-[#bdbdbd] h-4 w-4 ml-1"
-                    >
-                      <path
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                        d="m19.5 8.25-7.5 7.5-7.5-7.5"
-                      />
-                    </svg>
-                  </button>
-                  <div className="h-6 border-l border-slate-200 ml-1"></div>
-                  {filterShow && (
-                    <div className="min-w-[287px] flex flex-wrap overflow-hidden absolute left-[-3px] top-[7px] w-full mt-10 w-full bg-white border border-slate-200 rounded-md shadow-sm z-10 p-[7px]">
-                      <ul
-                        className="flex flex-wrap w-full"
-                        id="dropdownOptions"
-                      >
-                        {columns
-                          .filter((f) => activeFilterColumn.key !== f.key)
-                          .map((v, k) => (
-                            <li
-                              key={k}
-                              onClick={() => {
-                                setActiveFilterColumn(v);
-                                setFilterShow(false);
-                              }}
-                              className="w-full px-4 py-2 text-slate-600 hover:bg-slate-50 text-sm cursor-pointer"
-                              data-value="Europe"
-                            >
-                              {v.title}
-                            </li>
-                          ))}
-                      </ul>
-                    </div>
-                  )}
-                </div>
-                <input
-                  type="text"
-                  className="h-[40px] w-full bg-[#fcfcfc] placeholder:text-slate-400 text-slate-700 text-sm border border-[#f6f6f6] rounded-md pr-12 pl-28 py-2 transition duration-300 ease focus:outline-none focus:border-slate-400 hover:border-slate-300 focus:shadow"
-                  placeholder="Search..."
-                />
-
+        <section className="flex w-full items-center justify-between gap-5 pb-5">
+          <div className="w-1/2 max-w-sm min-w-[200px]">
+            <div className="flex items-center relative">
+              <div className="absolute top-1 left-1 flex items-center">
                 <button
-                  onClick={header.searchAction}
+                  onClick={() => setFilterShow(!filterShow)}
                   disabled={data.loading}
-                  className="h-[30px] absolute right-1 rounded p-1.5 border border-transparent text-center text-sm text-white transition-all hover:shadow focus:bg-slate-700 focus:shadow-none active:bg-slate-700 hover:bg-slate-700 active:shadow-none disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none"
-                  type="button"
+                  className="h-[32.5px] rounded border border-transparent py-1 px-1.5 text-center flex items-center text-sm transition-all text-slate-600"
                 >
+                  <span
+                    id="dropdownSpan"
+                    className="text-ellipsis overflow-hidden text-[#838383] text-[9pt]"
+                  >
+                    {activeFilterColumn.title}
+                  </span>
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
-                    viewBox="0 0 16 16"
-                    fill="currentColor"
-                    className="color-[#bdbdbd] w-4 h-4"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke-width="1.5"
+                    stroke="currentColor"
+                    className="text-[#838383] h-4 w-4 ml-1"
                   >
                     <path
-                      style={{ fill: "#bdbdbd" }}
-                      fill-rule="evenodd"
-                      d="M9.965 11.026a5 5 0 1 1 1.06-1.06l2.755 2.754a.75.75 0 1 1-1.06 1.06l-2.755-2.754ZM10.5 7a3.5 3.5 0 1 1-7 0 3.5 3.5 0 0 1 7 0Z"
-                      clip-rule="evenodd"
-                    ></path>
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      d="m19.5 8.25-7.5 7.5-7.5-7.5"
+                    />
                   </svg>
                 </button>
+                <div className="h-6 border-l border-slate-200 ml-1"></div>
+                {filterShow && (
+                  <div className="min-w-[287px] flex flex-wrap overflow-hidden absolute left-[-3px] top-[7px] w-full mt-10 w-full bg-white border border-slate-200 rounded-md shadow-sm z-10 p-[7px]">
+                    <ul className="flex flex-wrap w-full gap-[5px]">
+                      {columns
+                        .filter((f) => activeFilterColumn.key !== f.key)
+                        .map((v, k) => (
+                          <li
+                            key={k}
+                            onClick={() => {
+                              setActiveFilterColumn(v);
+                              setFilterShow(false);
+                            }}
+                            className="w-full px-4 py-2 text-slate-700 hover:bg-slate-50 text-[10pt] bg-[#fbfbfb] border border-[1px] border-[#e9e9e9] rounded-[5px] cursor-pointer"
+                            data-value="Europe"
+                          >
+                            {v.title}
+                          </li>
+                        ))}
+                    </ul>
+                  </div>
+                )}
               </div>
+              <input
+                type="text"
+                onChange={(e) => {
+                  const searchValue = e.target.value.toUpperCase();
+                  const filtered = (data.entities || []).filter((item) =>
+                    (item?.[activeFilterColumn.key as keyof T] as string)
+                      .toUpperCase()
+                      .includes(searchValue)
+                  );
+                  setFilterData(filtered);
+                }}
+                className="h-[40px] w-full bg-[#fbfbfb] placeholder:text-slate-400 text-[#838383] text-[10pt] border border-[#ddd] rounded-md pr-12 pl-[90px] py-2 transition duration-300 ease focus:outline-none focus:border-slate-400 hover:border-slate-300 focus:shadow"
+                placeholder="Search..."
+              />
+
+              <button
+                onClick={header?.searchAction}
+                disabled={data.loading}
+                className="h-[30px] absolute right-1 rounded p-1.5 border border-transparent text-center text-sm text-white transition-all hover:shadow focus:bg-slate-700 focus:shadow-none active:bg-slate-700 hover:bg-slate-700 active:shadow-none disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none"
+                type="button"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  viewBox="0 0 16 16"
+                  fill="currentColor"
+                  className="color-[#bdbdbd] w-4 h-4"
+                >
+                  <path
+                    style={{ fill: "#bdbdbd" }}
+                    fill-rule="evenodd"
+                    d="M9.965 11.026a5 5 0 1 1 1.06-1.06l2.755 2.754a.75.75 0 1 1-1.06 1.06l-2.755-2.754ZM10.5 7a3.5 3.5 0 1 1-7 0 3.5 3.5 0 0 1 7 0Z"
+                    clip-rule="evenodd"
+                  ></path>
+                </svg>
+              </button>
             </div>
-            <div className="flex justify-end items-center w-1/2 gap-5">
+          </div>
+          <div className="flex justify-end items-center w-1/2 gap-5">
+            {header?.newAction && (
               <button
                 onClick={header.newAction}
                 className="h-[35px] mt-4 md:mt-0 rounded-full bg-[#000] py-1 px-7 border border-transparent text-center text-sm text-white transition-all shadow-md hover:shadow-lg focus:bg-slate-700"
@@ -170,16 +186,16 @@ function DataTable<T, R>({
               >
                 New
               </button>
-              <button
-                disabled={data.loading}
-                onClick={dispatch?.all}
-                className={`${data.loading ? "loading" : ""}`}
-              >
-                <RiRefreshLine size={20} />
-              </button>
-            </div>
-          </section>
-        )}
+            )}
+            <button
+              disabled={data.loading}
+              onClick={dispatch?.all}
+              className={`${data.loading ? "loading" : ""}`}
+            >
+              <RiRefreshLine size={20} />
+            </button>
+          </div>
+        </section>
 
         <div className="min-w-full inline-block align-middle">
           <div className="overflow-hidden">
@@ -227,7 +243,7 @@ function DataTable<T, R>({
                   )}
                   {!data.error && data.success && (
                     <tbody className="divide-y divide-gray-200">
-                      {(data?.entities || []).map((v, k) => (
+                      {filterData.map((v, k) => (
                         <tr key={k}>
                           <td>{++k}</td>
 
