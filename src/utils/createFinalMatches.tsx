@@ -100,12 +100,7 @@ export function createQualificationMatches(
     });
 
     // Sort by points, then goal difference, then goals scored
-    standings.sort((a, b) => {
-      if (b.points !== a.points) return b.points - a.points;
-      if (b.goalDifference !== a.goalDifference)
-        return b.goalDifference - a.goalDifference;
-      return b.goalsFor - a.goalsFor;
-    });
+    standings.sort((a, b) => b.points - a.points);
 
     groupStandings[group.name] = standings;
   });

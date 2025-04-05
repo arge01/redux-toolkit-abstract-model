@@ -250,26 +250,27 @@ function SimulationNextMatch() {
       }
     }
   };
-
   return (
     <Card>
-      <Card.Item className="flex justify-between w-full">
-        <Button
-          onClick={() => navigate(`/play/groups/${key}/matches`)}
-          variant="danger"
-          className="flex justify-between items-center"
-        >
-          <GrPrevious className="pr-[7.5px]" size={25} /> Back
-        </Button>
-        <span className="items-center text-[10pt] justify-center font-bold flex">
-          {tournamed.entity?.name}
-        </span>
-        <SimulationNextMatchButton
-          loading={loading}
-          onClick={() => nextSimulate()}
-          name={name}
-        />
-      </Card.Item>
+      {Number(totalMatch?.length) > 0 && (
+        <Card.Item className="flex justify-between w-full">
+          <Button
+            onClick={() => navigate(`/play/groups/${key}/matches`)}
+            variant="danger"
+            className="flex justify-between items-center"
+          >
+            <GrPrevious className="pr-[7.5px]" size={25} /> Back
+          </Button>
+          <span className="items-center text-[10pt] justify-center font-bold flex">
+            {tournamed.entity?.name}
+          </span>
+          <SimulationNextMatchButton
+            loading={loading}
+            onClick={() => nextSimulate()}
+            name={name}
+          />
+        </Card.Item>
+      )}
 
       {Number(data?.champion.length) > 0 && (
         <Card.Item className="flex justify-between w-full">
