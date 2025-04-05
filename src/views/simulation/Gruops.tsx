@@ -82,7 +82,7 @@ function Groups() {
               });
             } else {
               toast.update(toastId, {
-                render: "Failed to teams",
+                render: "Teams are already created",
                 type: "warning",
                 isLoading: false,
                 autoClose: 3000,
