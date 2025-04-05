@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { useEffect, useState } from "react";
 import { GrNext, GrPrevious } from "react-icons/gr";
@@ -23,10 +22,14 @@ import {
   type MODEL as Tournamed,
   services as tournamedServices,
 } from "@/services/tournamed";
-import { createGroupMatches } from "@/utils/createGroupMatches";
+import { createGroupMatchesForWeek } from "@/utils/createGroupMatches";
 import { getTotalPoints } from "@/utils/getTotalPoints ";
+import Match from "./Match";
+import ShowAllMatches from "./ShowAllMatches";
 
 function Matches() {
+  const navigate = useNavigate();
+
   const [totalMatch, setTotalMatch] = useState<MatchModel[] | undefined>(
     undefined
   );
@@ -40,13 +43,11 @@ function Matches() {
         setTotalMatch(response.data);
       }
     } catch (error: ErrorType) {
-      toast.error("Score could not be calculated");
+      toast.error(error.message);
     }
   };
 
   const [page, setPage] = useState<number>(0);
-
-  const navigate = useNavigate();
 
   const [matches, matchesDispatch] = useService<MatchModel, MatchRequest>(
     matchService
@@ -56,11 +57,14 @@ function Matches() {
   const nextMatches = async () => {
     setLoading(true);
 
-    const groupMatch = createGroupMatches(
+    const week = createGroupMatchesForWeek(
       groups.entities || [],
       soccer.entities || [],
-      tournamed.entity || ({} as Tournamed)
+      tournamed.entity || ({} as Tournamed),
+      page + 1
     );
+
+    const groupMatch = week.map(({ week, ...rest }) => rest);
 
     try {
       const response = await fetchMiddleware(
@@ -77,7 +81,7 @@ function Matches() {
           totalMatchResponse(tournamed.entity);
           matchesDispatch.criteria([{ tournamed: tournamed.entity }], {
             page,
-            size: 48,
+            size: 16,
           });
         }
       }
@@ -113,7 +117,7 @@ function Matches() {
     if (tournamed.entity?.id) {
       matchesDispatch.criteria([{ tournamed: tournamed.entity }], {
         page: 1,
-        size: 48,
+        size: 16,
       });
     }
   }, [tournamed]);
@@ -133,10 +137,31 @@ function Matches() {
   }, [tournamed, matches.findAllSuccess]);
 
   useEffect(() => {
-    if (totalMatch?.length || 0 > 48) {
-      setPage(Number(totalMatch?.length) / 48);
+    if (totalMatch?.length || 0 > 16) {
+      setPage(Math.ceil(Number(totalMatch?.length) / 16));
     }
   }, [totalMatch]);
+
+  const [show, setShow] = useState<boolean>(false);
+  const [findMatches, setFindMatches] = useState<MatchModel[]>(
+    [] as MatchModel[]
+  );
+  const [findMatchesSoccer, setFindMatchesSoccer] = useState<MODEL>(
+    {} as MODEL
+  );
+  const selectFindMatches = (soccer: MODEL, matchesAll: MatchModel[]) => {
+    const matchesField =
+      matchesAll.filter((f) => Number(f.field.id) === Number(soccer.id)) ||
+      ([] as MatchModel[]);
+
+    const matchesOutfield =
+      matchesAll.filter((f) => Number(f.outfield.id) === Number(soccer.id)) ||
+      ([] as MatchModel[]);
+
+    setFindMatches([...matchesField, ...matchesOutfield]);
+    setFindMatchesSoccer(soccer);
+    setShow(true);
+  };
 
   return (
     <Card>
@@ -153,77 +178,44 @@ function Matches() {
             <span className="items-center text-[10pt] justify-center font-bold flex">
               {tournamed.entity.name}
             </span>
-            <Button
-              onClick={() => (page <= 2 ? nextMatches() : undefined)}
-              loading={loading}
-              variant="dark"
-              className="flex justify-between items-center"
-            >
-              Play Weeks {page + 1} <GrNext className="pl-[7.5px]" size={25} />
-            </Button>
-          </Card.Item>
-
-          <>
-            {page <= 2 ? (
+            <div className="flex gap-[5px]">
               <>
-                {matches.entities?.length ? (
-                  <Card.Item className="w-full">
-                    <div className="space-y-4 p-4">
-                      <h2 className="text-xl font-bold mb-4">Match Results</h2>
-
-                      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                        {matches.entities?.map((match: any) => (
-                          <div
-                            key={match.id}
-                            className="border rounded-lg p-4 shadow-sm hover:shadow-md transition-shadow"
-                          >
-                            <div className="flex justify-between items-center">
-                              <div className="text-right flex-1">
-                                <p className="font-medium">
-                                  {match.field.name}
-                                </p>
-                                <p className="text-sm text-gray-500">
-                                  {match.field.country}
-                                </p>
-                              </div>
-
-                              <div className="mx-4 flex flex-col items-center">
-                                <div className="text-2xl font-bold">
-                                  {match.goal_field} - {match.goal_outfield}
-                                </div>
-                                <div className="text-xs text-gray-500 mt-1">
-                                  {new Date(
-                                    match.created_at || new Date()
-                                  ).toLocaleDateString()}
-                                </div>
-                              </div>
-
-                              <div className="text-left flex-1">
-                                <p className="font-medium">
-                                  {match.outfield.name}
-                                </p>
-                                <p className="text-sm text-gray-500">
-                                  {match.outfield.country}
-                                </p>
-                              </div>
-                            </div>
-
-                            <div className="mt-3 pt-2 border-t text-center text-sm text-gray-500">
-                              Group {match.groups?.name}
-                            </div>
-                          </div>
-                        ))}
-                      </div>
-                    </div>
-                  </Card.Item>
+                {page <= 5 ? (
+                  <Button
+                    onClick={() => (page <= 5 ? nextMatches() : undefined)}
+                    loading={loading}
+                    variant="dark"
+                    className="flex justify-between items-center"
+                  >
+                    Play Weeks {page <= 5 ? page + 1 : 6}{" "}
+                    <GrNext className="pl-[7.5px]" size={25} />
+                  </Button>
                 ) : (
-                  <></>
+                  <Button
+                    onClick={() => navigate(`/play/groups/${key}/finals`)}
+                    loading={loading}
+                    variant="dark"
+                    className="flex justify-between items-center"
+                  >
+                    Next Simulation The Finals
+                    <GrNext className="pl-[7.5px]" size={25} />
+                  </Button>
                 )}
               </>
-            ) : (
-              <></>
-            )}
-          </>
+            </div>
+          </Card.Item>
+
+          {page <= 5 ? (
+            <>
+              {matches.entities?.length ? (
+                <Match matches={matches.entities} />
+              ) : (
+                <></>
+              )}
+            </>
+          ) : (
+            <></>
+          )}
 
           {totalMatch && (
             <Card.Item className="w-full">
@@ -237,7 +229,7 @@ function Matches() {
                       {v.name.toUpperCase()} GROUP
                     </div>
                     <div
-                      className={`divide-y divide ${page <= 2 ? "" : "final-group"}`}
+                      className={`divide-y divide ${page <= 5 ? "" : "final-group"}`}
                     >
                       {soccer.entities
                         ?.filter((f) => f.groups.id === v.id)
@@ -251,10 +243,21 @@ function Matches() {
                             key={sk}
                             className="divide-group p-3 flex items-center justify-between"
                           >
-                            <div className="flex items-center space-x-3">
+                            <a
+                              href={`#group=${encodeURIComponent(s.groups.id)}&team=${encodeURIComponent(s.id)}`}
+                              className="flex items-center space-x-3"
+                            >
                               <span className="text-gray-500">{s.country}</span>
-                              <span className="font-medium">{s.name}</span>
-                            </div>
+                              <span
+                                onClick={() => {
+                                  selectFindMatches(s, totalMatch);
+                                  return false;
+                                }}
+                                className="cursor-pointer hover:no-underline font-medium text-[blue] underline"
+                              >
+                                {s.name}
+                              </span>
+                            </a>
                             <span className="text-[10pt] font-bold text-gray-500">
                               {getTotalPoints(s, totalMatch)}
                             </span>
@@ -267,6 +270,14 @@ function Matches() {
             </Card.Item>
           )}
         </>
+      )}
+
+      {show && (
+        <ShowAllMatches
+          soccer={findMatchesSoccer}
+          matches={findMatches}
+          setShow={setShow}
+        />
       )}
     </Card>
   );

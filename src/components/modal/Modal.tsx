@@ -2,12 +2,15 @@ export type ModalProps = {
   title: string;
   setShow: React.Dispatch<React.SetStateAction<boolean>>;
   children: React.ReactNode;
+  maxWidth?: boolean;
 };
 
-function Modal({ title, setShow, children }: ModalProps) {
+function Modal({ title, setShow, children, maxWidth }: ModalProps) {
   return (
     <div className="flex overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full">
-      <div className="relative p-4 w-full max-w-md max-h-full">
+      <div
+        className={`relative p-4 ${maxWidth ? "w-auto" : "w-full"} ${maxWidth ? "" : "max-w-md"} max-h-full`}
+      >
         {/* Modal content */}
         <div className="relative bg-white rounded-lg shadow-sm dark:bg-gray-700">
           {/* Modal header */}

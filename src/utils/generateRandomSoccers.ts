@@ -95,7 +95,7 @@ export const generateRandomSoccers = (
     const turkishClub = TURKISH_CLUBS.find((club) => name.includes(club.name));
     const isTurkishClub = !!turkishClub;
 
-    return {
+    const random = {
       id,
       tournamed,
       groups: null,
@@ -115,6 +115,30 @@ export const generateRandomSoccers = (
         ? turkishClub.color
         : COLORS[Math.floor(Math.random() * COLORS.length)],
     };
+
+    if (random.name === "Merzifon SC") {
+      random.power = {
+        id: 0,
+        field: 100,
+        outfield: 100,
+        power: 100,
+        playing: 100,
+        fortunate: Math.floor(Math.random() * 75) + 25,
+      };
+    }
+
+    if (random.name === "Çorumspor FC") {
+      random.power = {
+        id: 0,
+        field: 100,
+        outfield: 100,
+        power: 100,
+        playing: 100,
+        fortunate: Math.floor(Math.random() * 75) + 25,
+      };
+    }
+
+    return random;
   });
 
   const shuffledTeams = [...allTeams].sort(() => Math.random() - 0.5);

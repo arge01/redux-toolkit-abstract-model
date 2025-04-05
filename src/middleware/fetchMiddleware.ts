@@ -4,7 +4,7 @@ import axiosInstance from "@/utils/axios.interceptor";
 export function fetchMiddleware<T = unknown>(
   url: string,
   method: Method,
-  data: T
+  data?: T
 ) {
   const config = {
     method,

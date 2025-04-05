@@ -9,6 +9,7 @@ import SignUp from "@/views/auth/SignUp";
 import Simulation from "@/views/simulation";
 import Groups from "@/views/simulation/Gruops";
 import Matches from "@/views/simulation/Matches";
+import SimulationNextMatch from "@/views/simulation/SimulationNextMatch";
 
 const router = createBrowserRouter([
   {
@@ -54,6 +55,10 @@ const router = createBrowserRouter([
               {
                 path: "matches",
                 element: <Matches />,
+              },
+              {
+                path: "finals",
+                element: <SimulationNextMatch />,
               },
             ],
           },

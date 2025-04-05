@@ -15,6 +15,71 @@ export interface MODEL {
   created_at?: Date;
 }
 
+export interface MATCHES {
+  id: number;
+  field: Soccer;
+  goalField: number;
+  goalOutField: number;
+  outfield: Soccer;
+  tournamed: Tournamed;
+  goalOutFieldPenalty?: number | undefined;
+  goalFieldPenalty?: number | undefined;
+  isPenalty: boolean;
+  created_at?: Date;
+}
+
+export interface QUA {
+  id: number;
+  field: Soccer;
+  goalField: number;
+  goalOutField: number;
+  outfield: Soccer;
+  tournamed: Tournamed;
+  goalOutFieldPenalty?: number | undefined;
+  goalFieldPenalty?: number | undefined;
+  isPenalty: boolean;
+  created_at?: Date;
+}
+
+export interface QUARTER {
+  id: number;
+  field: Soccer;
+  goalField: number;
+  goalOutField: number;
+  outfield: Soccer;
+  tournamed: Tournamed;
+  goalOutFieldPenalty?: number | undefined;
+  goalFieldPenalty?: number | undefined;
+  isPenalty: boolean;
+  created_at?: Date;
+}
+
+export interface SEMI {
+  id: number;
+  field: Soccer;
+  goalField: number;
+  goalOutField: number;
+  outfield: Soccer;
+  tournamed: Tournamed;
+  goalOutFieldPenalty?: number | undefined;
+  goalFieldPenalty?: number | undefined;
+  isPenalty: boolean;
+  created_at?: Date;
+}
+
+export interface FINAL {
+  id: number;
+  field: Soccer;
+  goalField: number;
+  goalOutField: number;
+  outfield: Soccer;
+  tournamed: Tournamed;
+  goalOutFieldPenalty?: number | undefined;
+  goalFieldPenalty?: number | undefined;
+  isPenalty: boolean;
+  created_at?: Date;
+}
+
 export interface REQUEST {
   groups: number;
   field: number;

@@ -15,6 +15,7 @@ interface ButtonProps {
     | "dark"
     | "link";
   loading?: boolean;
+  disabled?: boolean;
   type?: "button" | "submit" | "reset";
 }
 
@@ -24,6 +25,7 @@ const Button: React.FC<ButtonProps> = ({
   onClick,
   variant = "primary",
   loading = false,
+  disabled = false,
   type = "button",
 }) => {
   const baseClasses = "font-bold py-2 px-4 rounded";
@@ -44,7 +46,7 @@ const Button: React.FC<ButtonProps> = ({
       type={type}
       className={`${className} relative flex item-center ${loading ? "loading" : ""} justify-center ${baseClasses} ${variantClasses[variant]}`}
       onClick={onClick}
-      disabled={loading}
+      disabled={disabled ? disabled : loading}
     >
       {children}
       {loading && (
