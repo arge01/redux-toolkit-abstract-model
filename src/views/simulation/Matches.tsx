@@ -80,7 +80,7 @@ function Matches() {
         if (tournamed.entity) {
           totalMatchResponse(tournamed.entity);
           matchesDispatch.criteria([{ tournamed: tournamed.entity }], {
-            page,
+            page: page + 1,
             size: 16,
           });
         }
