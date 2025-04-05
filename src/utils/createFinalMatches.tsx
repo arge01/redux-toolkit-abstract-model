@@ -363,25 +363,23 @@ export function determineChampion(matches: FINAL[]): S {
       if (
         Number(match.goal_field_penalty) > Number(match.goal_outfield_penalty)
       ) {
-        winners = match.field;
+        return (winners = match.field);
       }
 
       if (
         Number(match.goal_outfield_penalty) > Number(match.goal_field_penalty)
       ) {
-        winners = match.outfield;
+        return (winners = match.outfield);
       }
-
-      return;
     }
 
     if (!Number(match.is_penalty)) {
       if (Number(match.goal_field) > Number(match.goal_outfield)) {
-        winners = match.field;
+        return (winners = match.field);
       }
 
       if (Number(match.goal_outfield) > Number(match.goal_field)) {
-        winners = match.outfield;
+        return (winners = match.outfield);
       }
     }
   });
@@ -398,25 +396,23 @@ export function determineChampion2(matches: FINAL[]): S {
       if (
         Number(match.goal_field_penalty) > Number(match.goal_outfield_penalty)
       ) {
-        winners = match.outField;
+        return (winners = match.outfield);
       }
 
       if (
         Number(match.goal_outfield_penalty) > Number(match.goal_field_penalty)
       ) {
-        winners = match.field;
+        return (winners = match.field);
       }
-
-      return;
     }
 
     if (!Number(match.is_penalty)) {
       if (Number(match.goal_field) > Number(match.goal_outfield)) {
-        winners = match.outfield;
+        return (winners = match.outfield);
       }
 
       if (Number(match.goal_outfield) > Number(match.goal_field)) {
-        winners = match.field;
+        return (winners = match.field);
       }
     }
   });

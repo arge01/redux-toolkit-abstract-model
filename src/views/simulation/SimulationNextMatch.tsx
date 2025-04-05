@@ -275,12 +275,15 @@ function SimulationNextMatch() {
         <Card.Item className="flex justify-between w-full">
           <div className="w-full flex flex-wrap">
             <h4 className="w-full text-[1.2rem] font-bold uppercase">
-              Champion
+              Champions <span className="text-[8pt]">[3, 1, 2]</span>
             </h4>
             <div className="w-full flex w-full flex-wrap items-end">
               <div className="w-full flex-col lg:w-1/3 md:w-full flex items-cenrer justify-center flex-wrap">
                 <span className="w-full font-bold text-[#eebb1c] flex w-full text-[1.3rem] items-center justify-center">
-                  {createFinalMatches.determineChampion2(data?.semi || []).name}
+                  {
+                    createFinalMatches.determineChampion2(data?.semi || [])
+                      ?.name
+                  }
                 </span>
                 <div className="w-full flex items-center justify-center p-3">
                   <img className="max-h-[75px]" src="/world-cup.png" alt="" />
@@ -289,7 +292,10 @@ function SimulationNextMatch() {
 
               <div className="w-full lg:w-1/3 md:w-full flex items-cenrer justify-center flex-wrap">
                 <span className="w-full font-bold text-[#eebb1c] flex w-full text-[1.5rem] items-center justify-center">
-                  {createFinalMatches.determineChampion(data?.final || []).name}
+                  {
+                    createFinalMatches.determineChampion(data?.final || [])
+                      ?.name
+                  }
                 </span>
                 <div className="w-full flex items-center justify-center p-5">
                   <img className="max-h-[100px]" src="/world-cup.png" alt="" />
@@ -300,7 +306,7 @@ function SimulationNextMatch() {
                 <span className="w-full font-bold text-[#eebb1c] flex w-full text-[1.3rem] items-center justify-center">
                   {
                     createFinalMatches.determineChampion2(data?.final || [])
-                      .name
+                      ?.name
                   }
                 </span>
                 <div className="w-full flex items-center justify-center p-3">
