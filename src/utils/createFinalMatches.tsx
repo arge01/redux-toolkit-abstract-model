@@ -23,7 +23,7 @@ export function getWinnersFromMatches(matches: MATCHES[]): S[] {
   const winners: S[] = [];
 
   matches.forEach((match: any) => {
-    if (match.is_penalty) {
+    if (Number(match.is_penalty)) {
       if (
         Number(match.goal_field_penalty) > Number(match.goal_outfield_penalty)
       ) {
@@ -39,7 +39,7 @@ export function getWinnersFromMatches(matches: MATCHES[]): S[] {
       return;
     }
 
-    if (!match.is_penalty) {
+    if (!Number(match.is_penalty)) {
       if (Number(match.goal_field) > Number(match.goal_outfield)) {
         winners.push(match.field);
       }
@@ -359,7 +359,7 @@ export function determineChampion(matches: FINAL[]): S {
   let winners: S = {} as S;
 
   matches.forEach((match: any) => {
-    if (match.is_penalty) {
+    if (Number(match.is_penalty)) {
       if (
         Number(match.goal_field_penalty) > Number(match.goal_outfield_penalty)
       ) {
@@ -375,7 +375,7 @@ export function determineChampion(matches: FINAL[]): S {
       return;
     }
 
-    if (!match.is_penalty) {
+    if (!Number(match.is_penalty)) {
       if (Number(match.goal_field) > Number(match.goal_outfield)) {
         winners = match.field;
       }
@@ -394,7 +394,7 @@ export function determineChampion2(matches: FINAL[]): S {
   let winners: S = {} as S;
 
   matches.forEach((match: any) => {
-    if (match.is_penalty) {
+    if (Number(match.is_penalty)) {
       if (
         Number(match.goal_field_penalty) > Number(match.goal_outfield_penalty)
       ) {
@@ -410,7 +410,7 @@ export function determineChampion2(matches: FINAL[]): S {
       return;
     }
 
-    if (!match.is_penalty) {
+    if (!Number(match.is_penalty)) {
       if (Number(match.goal_field) > Number(match.goal_outfield)) {
         winners = match.outfield;
       }
