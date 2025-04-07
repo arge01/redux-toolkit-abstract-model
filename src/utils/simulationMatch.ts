@@ -4,20 +4,20 @@ import { MODEL as S } from "@/services/soccer";
 export function simulateMatch(homeTeam: S, awayTeam: S) {
   // Contribution ratios of each factor to scoring probability
 
-  // Home advantage (field) - 25%
-  const homeFieldAdvantage = homeTeam.power.field * 0.25;
+  // Home advantage (field) - 20%
+  const homeFieldAdvantage = homeTeam.power.field * 0.20;
 
-  // Away disadvantage (outfield) - 25%
-  const awayFieldDisadvantage = awayTeam.power.outfield * 0.25;
+  // Away disadvantage (outfield) - 15%
+  const awayFieldDisadvantage = awayTeam.power.outfield * 0.15;
 
-  // General team power (power) - 25%
-  const teamPower = homeTeam.power.power * 0.25;
+  // General team power (power) - 30%
+  const teamPower = homeTeam.power.power * 0.30;
 
   // Game performance (playing) - 25%
   const playingPerformance = homeTeam.power.playing * 0.25;
 
-  // Luck factor (fortunate) - 50%
-  const luckFactor = homeTeam.power.fortunate * 0.5;
+  // Luck factor (fortunate) - 10%
+  const luckFactor = homeTeam.power.fortunate * 0.10;
 
   // Home team's goal scoring probability
   const homeScoringProbability =
@@ -30,11 +30,11 @@ export function simulateMatch(homeTeam: S, awayTeam: S) {
 
   // Same calculation for away team (with reverse factors)
   const awayScoringProbability =
-    (awayTeam.power.field * 0.25 +
-      homeTeam.power.outfield * 0.25 +
-      awayTeam.power.power * 0.25 +
+    (awayTeam.power.field * 0.15 +
+      homeTeam.power.outfield * 0.20 +
+      awayTeam.power.power * 0.30 +
       awayTeam.power.playing * 0.25 +
-      awayTeam.power.fortunate * 0.5) /
+      awayTeam.power.fortunate * 0.10) /
     100;
 
   let homeGoals = 0;
@@ -58,20 +58,20 @@ export function simulateMatch(homeTeam: S, awayTeam: S) {
 export function simulateMatchFinal(homeTeam: S, awayTeam: S) {
   // Contribution ratios of each factor to scoring probability
 
-  // Home advantage (field) - 25%
-  const homeFieldAdvantage = homeTeam.power.field * 0.25;
+   // Home advantage (field) - 20%
+  const homeFieldAdvantage = homeTeam.power.field * 0.20;
 
-  // Away disadvantage (outfield) - 25%
-  const awayFieldDisadvantage = awayTeam.power.outfield * 0.25;
+  // Away disadvantage (outfield) - 15%
+  const awayFieldDisadvantage = awayTeam.power.outfield * 0.15;
 
-  // General team power (power) - 25%
-  const teamPower = homeTeam.power.power * 0.25;
+  // General team power (power) - 30%
+  const teamPower = homeTeam.power.power * 0.30;
 
   // Game performance (playing) - 25%
-  const playingPerformance = homeTeam.power.playing * 0.5;
+  const playingPerformance = homeTeam.power.playing * 0.25;
 
-  // Luck factor (fortunate) - 50%
-  const luckFactor = homeTeam.power.fortunate * 0.7;
+  // Luck factor (fortunate) - 10%
+  const luckFactor = homeTeam.power.fortunate * 0.10;
 
   // Home team's goal scoring probability
   const homeScoringProbability =
@@ -84,11 +84,11 @@ export function simulateMatchFinal(homeTeam: S, awayTeam: S) {
 
   // Same calculation for away team (with reverse factors)
   const awayScoringProbability =
-    (awayTeam.power.field * 0.25 +
-      homeTeam.power.outfield * 0.25 +
-      awayTeam.power.power * 0.25 +
-      awayTeam.power.playing * 0.5 +
-      awayTeam.power.fortunate * 0.7) /
+    (awayTeam.power.field * 0.15 +
+      homeTeam.power.outfield * 0.20 +
+      awayTeam.power.power * 0.30 +
+      awayTeam.power.playing * 0.25 +
+      awayTeam.power.fortunate * 0.10) /
     100;
 
   let homeGoals = 0;
