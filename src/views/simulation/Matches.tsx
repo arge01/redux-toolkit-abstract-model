@@ -175,7 +175,7 @@ function Matches() {
             >
               <GrPrevious className="pr-[7.5px]" size={25} /> Back
             </Button>
-            <span className="items-center text-[10pt] justify-center font-bold flex">
+            <span className="items-center text-[10pt] justify-center font-bold flex text-center p-5">
               {tournamed.entity.name}
             </span>
             <div className="flex gap-[5px]">
@@ -195,7 +195,7 @@ function Matches() {
                     onClick={() => navigate(`/play/groups/${key}/finals`)}
                     loading={loading}
                     variant="dark"
-                    className="flex justify-between items-center"
+                    className="flex justify-between items-center text-right"
                   >
                     Next Simulation The Finals
                     <GrNext className="pl-[7.5px]" size={25} />

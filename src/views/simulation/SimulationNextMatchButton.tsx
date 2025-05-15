@@ -20,7 +20,7 @@ function SimulationNextMatchButton({
           onClick={onClick}
           loading={loading}
           variant="dark"
-          className="flex justify-between items-center"
+          className="flex justify-between items-center text-right"
         >
           Play Qualification <GrNext className="pl-[7.5px]" size={25} />
         </Button>
@@ -32,7 +32,7 @@ function SimulationNextMatchButton({
           onClick={onClick}
           loading={loading}
           variant="dark"
-          className="flex justify-between items-center"
+          className="flex justify-between items-center text-right"
         >
           Play Quarter <GrNext className="pl-[7.5px]" size={25} />
         </Button>
@@ -44,7 +44,7 @@ function SimulationNextMatchButton({
           onClick={onClick}
           loading={loading}
           variant="dark"
-          className="flex justify-between items-center"
+          className="flex justify-between items-center text-right"
         >
           Play Semi <GrNext className="pl-[7.5px]" size={25} />
         </Button>
@@ -56,7 +56,7 @@ function SimulationNextMatchButton({
           onClick={onClick}
           loading={loading}
           variant="dark"
-          className="flex justify-between items-center"
+          className="flex justify-between items-center text-right"
         >
           Play Final <GrNext className="pl-[7.5px]" size={25} />
         </Button>
@@ -67,7 +67,7 @@ function SimulationNextMatchButton({
         <Button
           loading={loading}
           variant="dark"
-          className="flex justify-between items-center"
+          className="flex justify-between items-center text-right"
         >
           Final <FaFlagCheckered className="pl-[7.5px]" size={25} />
         </Button>

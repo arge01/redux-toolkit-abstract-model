@@ -261,7 +261,7 @@ function SimulationNextMatch() {
           >
             <GrPrevious className="pr-[7.5px]" size={25} /> Back
           </Button>
-          <span className="items-center text-[10pt] justify-center font-bold flex">
+          <span className="items-center text-[10pt] justify-center font-bold flex text-center p-5">
             {tournamed.entity?.name}
           </span>
           <SimulationNextMatchButton
